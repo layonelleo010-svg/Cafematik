@@ -1,155 +1,221 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4E342E">
-  <title>Café Control</title>
-  <style>
-    /* ----- Estilos generales ----- */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #F5F0EB;
-      color: #3E2723;
-      padding-bottom: 70px;
-    }
-    .header {
-      background: #4E342E;
-      color: #FFF8F0;
-      padding: 15px;
-      text-align: center;
-      font-size: 1.3rem;
-      font-weight: bold;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    .nav {
-      position: fixed; bottom: 0; width: 100%;
-      display: flex; justify-content: space-around;
-      background: #3E2723; padding: 8px 0;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-      z-index: 100;
-    }
-    .nav button {
-      background: none; border: none; color: #D7CCC8;
-      font-size: 0.8rem; display: flex; flex-direction: column; align-items: center;
-      padding: 5px 10px; border-radius: 12px; transition: 0.2s;
-    }
-    .nav button.active { color: #FFD54F; background: rgba(255,255,255,0.1); }
-    .nav button svg { width: 24px; height: 24px; margin-bottom: 2px; }
-    .container { padding: 20px; max-width: 600px; margin: 0 auto; }
-    .card {
-      background: #FFFFFF; border-radius: 16px; padding: 16px;
-      margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    .card h2 { font-size: 1.1rem; margin-bottom: 8px; color: #4E342E; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .metric {
-      background: #FFF8F0; border-radius: 12px; padding: 12px; text-align: center;
-    }
-    .metric .value { font-size: 1.5rem; font-weight: bold; color: #4E342E; }
-    .metric .label { font-size: 0.8rem; color: #6D4C41; }
-    .btn {
-      background: #6D4C41; color: white; border: none; border-radius: 25px;
-      padding: 10px 20px; font-size: 0.9rem; cursor: pointer; margin: 5px 2px;
-    }
-    .btn.secondary { background: #A1887F; }
-    input, select {
-      width: 100%; padding: 10px; margin: 5px 0 12px;
-      border: 1px solid #D7CCC8; border-radius: 10px; font-size: 0.95rem;
-      background: #FFF8F0;
-    }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th { background: #4E342E; color: white; padding: 8px; }
-    td { padding: 8px; border-bottom: 1px solid #EFEBE9; }
-    .alert { background: #FFF3E0; border-left: 4px solid #FF8F00; padding: 10px; margin: 10px 0; }
-    .hidden { display: none; }
-    .section { display: none; }
-    .section.active { display: block; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Café Control</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F0EB; color: #3E2723; padding: 10px; padding-bottom: 70px; }
+        .header { background: #4E342E; color: #FFF8F0; padding: 15px; text-align: center; font-size: 1.3rem; font-weight: bold; border-radius: 10px; margin-bottom: 10px; }
+        .nav { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #3E2723; padding: 8px 0; z-index: 100; }
+        .nav button { background: none; border: none; color: #D7CCC8; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; padding: 5px 10px; border-radius: 12px; transition: 0.2s; }
+        .nav button.active { color: #FFD54F; background: rgba(255,255,255,0.1); }
+        .container { max-width: 600px; margin: 0 auto; }
+        .card { background: #FFFFFF; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .metric { background: #FFF8F0; border-radius: 12px; padding: 12px; text-align: center; margin-bottom: 8px; }
+        .metric .value { font-size: 1.5rem; font-weight: bold; color: #4E342E; }
+        .metric .label { font-size: 0.8rem; color: #6D4C41; }
+        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn { background: #6D4C41; color: white; border: none; border-radius: 25px; padding: 10px 20px; font-size: 0.9rem; cursor: pointer; margin: 5px 2px; }
+        .btn.secondary { background: #A1887F; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0 12px; border: 1px solid #D7CCC8; border-radius: 10px; font-size: 0.95rem; background: #FFF8F0; }
+        .section { display: none; }
+        .section.active { display: block; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: #4E342E; color: white; padding: 8px; }
+        td { padding: 8px; border-bottom: 1px solid #EFEBE9; }
+    </style>
 </head>
 <body>
-  <div class="header">☕ Café Control</div>
+    <div class="header">☕ Café Control</div>
 
-  <div id="dashboard" class="section active">
-    <div class="container">
-      <div class="card">
-        <h2>📊 Resumen Hoy</h2>
-        <div class="grid2">
-          <div class="metric"><div class="value" id="hoyVentas">--</div><div class="label">Ventas Bs</div></div>
-          <div class="metric"><div class="value" id="hoyGanancia">--</div><div class="label">Ganancia Bs</div></div>
-          <div class="metric"><div class="value" id="hoyMargen">--</div><div class="label">Margen %</div></div>
-          <div class="metric"><div class="value" id="hoyVasos">--</div><div class="label">Vasos totales</div></div>
+    <div id="dashboard" class="section active">
+        <div class="container">
+            <div class="card">
+                <h2>📊 Hoy</h2>
+                <div class="grid2">
+                    <div class="metric"><div class="value" id="hoyVentas">0</div><div class="label">Ventas Bs</div></div>
+                    <div class="metric"><div class="value" id="hoyGanancia">0</div><div class="label">Ganancia Bs</div></div>
+                    <div class="metric"><div class="value" id="hoyMargen">0%</div><div class="label">Margen</div></div>
+                    <div class="metric"><div class="value" id="hoyVasos">0</div><div class="label">Vasos</div></div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>⚖️ Punto de Equilibrio</h2>
+                <div class="metric"><span class="value" id="pEquilibrio">0</span><br><span class="label">vasos/mes para cubrir costos fijos</span></div>
+            </div>
         </div>
-      </div>
-      <div class="card">
-        <h2>⚖️ Punto de Equilibrio</h2>
-        <div class="metric" style="background:#EFEBE9"><span class="value" id="pEquilibrio">--</span><br><span class="label">vasos necesarios/mes</span></div>
-        <div id="barraProgreso" style="height:10px; background:#D7CCC8; border-radius:5px; margin-top:8px;">
-          <div id="progresoFill" style="height:100%; width:0%; background:#4CAF50; border-radius:5px;"></div>
+    </div>
+
+    <div id="ventas" class="section">
+        <div class="container">
+            <div class="card">
+                <h2>📝 Registrar Venta</h2>
+                <label>Fecha</label><input type="date" id="fechaVenta">
+                <div id="productosVenta"></div>
+                <button class="btn" onclick="registrarVenta()">💾 Guardar</button>
+            </div>
+            <div class="card">
+                <h2>📋 Historial</h2>
+                <div id="historialVentas"></div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div id="ventas" class="section">
-    <div class="container">
-      <div class="card">
-        <h2>📝 Registrar Ventas</h2>
-        <label>Fecha</label><input type="date" id="fechaVenta">
-        <div id="productosVenta"></div>
-        <button class="btn" onclick="registrarVenta()">💾 Guardar Venta</button>
-      </div>
-      <div class="card">
-        <h2>📋 Historial de Ventas</h2>
-        <div id="historialVentas"></div>
-      </div>
+    <div id="gastos" class="section">
+        <div class="container">
+            <div class="card">
+                <h2>🧾 Gastos Operativos</h2>
+                <label>Descripción</label><input id="descGasto" placeholder="Alquiler, pasajes...">
+                <label>Monto (Bs)</label><input type="number" id="montoGasto" step="0.01">
+                <label>Fecha</label><input type="date" id="fechaGasto">
+                <button class="btn" onclick="registrarGasto()">➕ Añadir</button>
+                <div id="listaGastos" style="margin-top:15px;"></div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div id="inventario" class="section">
-    <div class="container">
-      <div class="card">
-        <h2>🧾 Insumos</h2>
-        <div id="listaInsumos"></div>
-        <button class="btn secondary" onclick="agregarInsumo()">+ Nuevo insumo</button>
-      </div>
+    <div class="nav">
+        <button onclick="showSection('dashboard')" class="active" id="btnDash">🏠 Inicio</button>
+        <button onclick="showSection('ventas')" id="btnVentas">📈 Ventas</button>
+        <button onclick="showSection('gastos')" id="btnGastos">💸 Gastos</button>
     </div>
-  </div>
 
-  <div id="gastos" class="section">
-    <div class="container">
-      <div class="card">
-        <h2>🧾 Gastos Operativos</h2>
-        <label>Descripción</label><input id="descGasto" placeholder="Alquiler, pasajes...">
-        <label>Monto (Bs)</label><input type="number" id="montoGasto" step="0.01">
-        <label>Fecha</label><input type="date" id="fechaGasto">
-        <button class="btn" onclick="registrarGasto()">➕ Añadir</button>
-        <div id="listaGastos" style="margin-top:15px;"></div>
-      </div>
-    </div>
-  </div>
+    <script>
+        // ----- DATOS PRECARGADOS (RECETAS Y COSTOS) -----
+        const productos = [
+            { nombre: 'Café', precio: 6.00, costo: 2.45 },
+            { nombre: 'Chocolate con Leche', precio: 7.00, costo: 2.38 },
+            { nombre: 'Capuchino', precio: 8.00, costo: 3.68 }
+        ];
 
-  <div class="nav">
-    <button onclick="showSection('dashboard')" class="active" id="btnDash">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,13H11V3H3V13M13,21H21V11H13V21M13,3V9H21V3H13M3,21H11V15H3V21Z"/></svg> Inicio
-    </button>
-    <button onclick="showSection('ventas')" id="btnVentas">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20,2H4C2.9,2,2,2.9,2,4V22L6,18H20C21.1,18,22,17.1,22,16V4C22,2.9,21.1,2,20,2M20,16H5.2L4,17.2V4H20V16Z"/></svg> Ventas
-    </button>
-    <button onclick="showSection('inventario')" id="btnInventario">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3,4H21V8H19V20H5V8H3V4M8,8H16V10H8V8M8,12H16V14H8V12M8,16H13V18H8V16"/></svg> Insumos
-    </button>
-    <button onclick="showSection('gastos')" id="btnGastos">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A2,2 0 0,1 8,11V9A2,2 0 0,1 10,7H11V6H13V7H15V9H11V10H14A2,2 0 0,1 16,12V14A2,2 0 0,1 14,16H13V17H11Z"/></svg> Gastos
-    </button>
-  </div>
+        // ----- FUNCIONES DE ALMACENAMIENTO LOCAL -----
+        function guardar(clave, datos) { localStorage.setItem(clave, JSON.stringify(datos)); }
+        function cargar(clave) { return JSON.parse(localStorage.getItem(clave)) || []; }
 
-  <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
-  <script>
-    // ----- Lógica de la aplicación (app.js) -----
-    // (El código completo de la app está en la siguiente sección)
-  </script>
+        // ----- NAVEGACIÓN -----
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('btn' + id.charAt(0).toUpperCase() + id.slice(1)).classList.add('active');
+            if (id === 'dashboard') actualizarDashboard();
+            if (id === 'ventas') { generarFormularioVenta(); mostrarHistorial(); }
+            if (id === 'gastos') mostrarGastos();
+        }
+
+        // ----- VENTAS -----
+        function generarFormularioVenta() {
+            const div = document.getElementById('productosVenta');
+            div.innerHTML = productos.map((p, i) => `
+                <label>${p.nombre} (Bs ${p.precio.toFixed(2)})</label>
+                <input type="number" id="vasos_${i}" placeholder="Vasos vendidos" min="0" value="0">
+                <input type="number" id="efectivo_${i}" placeholder="Efectivo recaudado (Bs)" step="0.01" value="0">
+                <div id="diff_${i}" style="color:red;font-size:0.8rem;"></div>
+                <input type="text" id="nota_${i}" placeholder="Nota por diferencia (opcional)">
+                <hr>
+            `).join('');
+            document.getElementById('fechaVenta').value = new Date().toISOString().split('T')[0];
+
+            // Calcular diferencias en tiempo real
+            for (let i = 0; i < productos.length; i++) {
+                document.getElementById(`vasos_${i}`).addEventListener('input', () => calcDiff(i));
+                document.getElementById(`efectivo_${i}`).addEventListener('input', () => calcDiff(i));
+            }
+        }
+
+        function calcDiff(i) {
+            const vasos = parseInt(document.getElementById(`vasos_${i}`).value) || 0;
+            const efectivo = parseFloat(document.getElementById(`efectivo_${i}`).value) || 0;
+            const esperado = vasos * productos[i].precio;
+            const diff = efectivo - esperado;
+            document.getElementById(`diff_${i}`).innerText = diff !== 0 ? `Diferencia: Bs ${diff.toFixed(2)}` : '';
+        }
+
+        function registrarVenta() {
+            const fecha = document.getElementById('fechaVenta').value;
+            if (!fecha) return alert('Selecciona una fecha');
+            const ventas = cargar('ventas');
+            for (let i = 0; i < productos.length; i++) {
+                const vasos = parseInt(document.getElementById(`vasos_${i}`).value) || 0;
+                const efectivo = parseFloat(document.getElementById(`efectivo_${i}`).value) || 0;
+                const nota = document.getElementById(`nota_${i}`).value;
+                ventas.push({ fecha, producto: productos[i].nombre, vasos, efectivo, esperado: vasos * productos[i].precio, nota });
+            }
+            guardar('ventas', ventas);
+            alert('Venta registrada');
+            generarFormularioVenta();
+            mostrarHistorial();
+        }
+
+        function mostrarHistorial() {
+            const ventas = cargar('ventas');
+            const div = document.getElementById('historialVentas');
+            if (ventas.length === 0) { div.innerHTML = '<p>No hay ventas aún.</p>'; return; }
+            const agrupado = {};
+            ventas.forEach(v => { if (!agrupado[v.fecha]) agrupado[v.fecha] = []; agrupado[v.fecha].push(v); });
+            div.innerHTML = Object.keys(agrupado).sort().reverse().map(fecha => {
+                const totalVasos = agrupado[fecha].reduce((s, v) => s + v.vasos, 0);
+                const totalEfectivo = agrupado[fecha].reduce((s, v) => s + v.efectivo, 0);
+                return `<p><b>${fecha}</b> - ${totalVasos} vasos, Bs ${totalEfectivo.toFixed(2)}</p>`;
+            }).join('');
+        }
+
+        // ----- GASTOS -----
+        function registrarGasto() {
+            const desc = document.getElementById('descGasto').value;
+            const monto = parseFloat(document.getElementById('montoGasto').value);
+            const fecha = document.getElementById('fechaGasto').value;
+            if (!desc || !monto || !fecha) return alert('Completa todos los campos');
+            const gastos = cargar('gastos');
+            gastos.push({ desc, monto, fecha });
+            guardar('gastos', gastos);
+            document.getElementById('descGasto').value = '';
+            document.getElementById('montoGasto').value = '';
+            mostrarGastos();
+        }
+
+        function mostrarGastos() {
+            const gastos = cargar('gastos');
+            const div = document.getElementById('listaGastos');
+            if (gastos.length === 0) { div.innerHTML = '<p>No hay gastos registrados.</p>'; return; }
+            div.innerHTML = '<table><tr><th>Descripción</th><th>Monto</th><th>Fecha</th></tr>' +
+                gastos.map(g => `<tr><td>${g.desc}</td><td>Bs ${g.monto.toFixed(2)}</td><td>${g.fecha}</td></tr>`).join('') + '</table>';
+        }
+
+        // ----- DASHBOARD -----
+        function actualizarDashboard() {
+            const ventas = cargar('ventas');
+            const gastos = cargar('gastos');
+            const hoy = new Date().toISOString().split('T')[0];
+
+            const ventasHoy = ventas.filter(v => v.fecha === hoy);
+            const totalVasos = ventasHoy.reduce((s, v) => s + v.vasos, 0);
+            const totalEfectivo = ventasHoy.reduce((s, v) => s + v.efectivo, 0);
+            const costoTotal = ventasHoy.reduce((s, v) => {
+                const prod = productos.find(p => p.nombre === v.producto);
+                return s + (prod ? prod.costo * v.vasos : 0);
+            }, 0);
+            const ganancia = totalEfectivo - costoTotal;
+            const margen = totalEfectivo > 0 ? ((ganancia / totalEfectivo) * 100).toFixed(1) : 0;
+
+            document.getElementById('hoyVentas').innerText = totalEfectivo.toFixed(2);
+            document.getElementById('hoyGanancia').innerText = ganancia.toFixed(2);
+            document.getElementById('hoyMargen').innerText = margen + '%';
+            document.getElementById('hoyVasos').innerText = totalVasos;
+
+            // Punto de equilibrio mensual
+            const gastosFijos = gastos.reduce((s, g) => s + g.monto, 0);
+            const margenPromedio = productos.reduce((s, p) => s + (p.precio - p.costo), 0) / productos.length;
+            const equilibrio = margenPromedio > 0 ? Math.ceil(gastosFijos / margenPromedio) : 0;
+            document.getElementById('pEquilibrio').innerText = equilibrio;
+        }
+
+        // ----- INICIALIZAR -----
+        document.getElementById('fechaGasto').value = new Date().toISOString().split('T')[0];
+        mostrarGastos();
+        actualizarDashboard();
+    </script>
 </body>
 </html>
