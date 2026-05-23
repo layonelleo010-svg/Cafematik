@@ -1,221 +1,738 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Café Control</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F5F0EB; color: #3E2723; padding: 10px; padding-bottom: 70px; }
-        .header { background: #4E342E; color: #FFF8F0; padding: 15px; text-align: center; font-size: 1.3rem; font-weight: bold; border-radius: 10px; margin-bottom: 10px; }
-        .nav { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; justify-content: space-around; background: #3E2723; padding: 8px 0; z-index: 100; }
-        .nav button { background: none; border: none; color: #D7CCC8; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; padding: 5px 10px; border-radius: 12px; transition: 0.2s; }
-        .nav button.active { color: #FFD54F; background: rgba(255,255,255,0.1); }
-        .container { max-width: 600px; margin: 0 auto; }
-        .card { background: #FFFFFF; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-        .metric { background: #FFF8F0; border-radius: 12px; padding: 12px; text-align: center; margin-bottom: 8px; }
-        .metric .value { font-size: 1.5rem; font-weight: bold; color: #4E342E; }
-        .metric .label { font-size: 0.8rem; color: #6D4C41; }
-        .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn { background: #6D4C41; color: white; border: none; border-radius: 25px; padding: 10px 20px; font-size: 0.9rem; cursor: pointer; margin: 5px 2px; }
-        .btn.secondary { background: #A1887F; }
-        input, select { width: 100%; padding: 10px; margin: 5px 0 12px; border: 1px solid #D7CCC8; border-radius: 10px; font-size: 0.95rem; background: #FFF8F0; }
-        .section { display: none; }
-        .section.active { display: block; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        th { background: #4E342E; color: white; padding: 8px; }
-        td { padding: 8px; border-bottom: 1px solid #EFEBE9; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Café Matic · Control de negocio</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f0eb;
+      color: #3e2c1c;
+      display: flex;
+      min-height: 100vh;
+    }
+    /* Sidebar elegante */
+    .sidebar {
+      width: 260px;
+      background: #2c1e14;
+      color: #e7d7c4;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1rem;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+    .sidebar .logo {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #d4b68a;
+    }
+    .sidebar .logo i {
+      font-size: 2rem;
+      color: #c8a27a;
+    }
+    .sidebar nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      color: #e7d7c4;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .sidebar nav a i {
+      width: 20px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+    .sidebar nav a:hover {
+      background: #4a3727;
+      color: #fff;
+    }
+    .sidebar nav a.active {
+      background: #c8a27a;
+      color: #2c1e14;
+      font-weight: 600;
+      box-shadow: 0 6px 14px rgba(200, 162, 122, 0.4);
+    }
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 2rem 2.5rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+    /* Header con selector de mes */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .month-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #fff;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .month-selector label {
+      font-weight: 500;
+      color: #5a4a3a;
+    }
+    .month-selector input[type="month"] {
+      border: 1px solid #d4b68a;
+      border-radius: 20px;
+      padding: 0.4rem 1rem;
+      font-family: inherit;
+      background: #fdfaf6;
+      color: #3e2c1c;
+    }
+    .section-title {
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #2c1e14;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title i {
+      color: #c8a27a;
+    }
+    /* Cards del dashboard */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card .label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #8b7355;
+      margin-bottom: 0.5rem;
+    }
+    .card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c1e14;
+    }
+    .card .sub {
+      font-size: 0.85rem;
+      color: #7b6b5a;
+      margin-top: 0.25rem;
+    }
+    .profit-positive {
+      color: #2d6a4f !important;
+    }
+    .profit-negative {
+      color: #bc4742 !important;
+    }
+    /* Paneles de formulario y tablas */
+    .panel {
+      background: #fff;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+      margin-bottom: 1.2rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      min-width: 140px;
+    }
+    .form-group label {
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: #5a4a3a;
+    }
+    .form-group input, .form-group select {
+      padding: 0.65rem 0.9rem;
+      border: 1px solid #ddd2c4;
+      border-radius: 14px;
+      font-family: inherit;
+      background: #fefcf8;
+      transition: 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #c8a27a;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(200,162,122,0.2);
+    }
+    .btn {
+      background: #c8a27a;
+      border: none;
+      color: #2c1e14;
+      font-weight: 600;
+      padding: 0.7rem 1.4rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.2s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn:hover {
+      background: #b28b5e;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #c8a27a;
+      color: #5a4a3a;
+    }
+    .btn-outline:hover {
+      background: #f7efe5;
+    }
+    .btn-danger {
+      background: #e0b4b4;
+      color: #5e2e2c;
+    }
+    .btn-danger:hover {
+      background: #d4a0a0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.8rem 0.5rem;
+      font-weight: 600;
+      color: #5a4a3a;
+      border-bottom: 2px solid #e4d5c2;
+    }
+    td {
+      padding: 0.7rem 0.5rem;
+      border-bottom: 1px solid #f0e5d8;
+    }
+    .badge {
+      background: #f0e5d8;
+      color: #3e2c1c;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+    }
+    .text-right {
+      text-align: right;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .mt-2 {
+      margin-top: 0.8rem;
+    }
+    .mb-2 {
+      margin-bottom: 0.8rem;
+    }
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 200px;
+        padding: 1.5rem 0.8rem;
+      }
+      .main-content {
+        margin-left: 200px;
+        padding: 1.5rem;
+      }
+      .inventory-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">☕ Café Control</div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <i class="fas fa-mug-hot"></i> Café Matic
+    </div>
+    <nav>
+      <a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a>
+      <a href="#" class="nav-link" data-section="ventas"><i class="fas fa-coffee"></i> Ventas</a>
+      <a href="#" class="nav-link" data-section="efectivo"><i class="fas fa-money-bill-wave"></i> Efectivo</a>
+      <a href="#" class="nav-link" data-section="compras"><i class="fas fa-shopping-cart"></i> Compras</a>
+      <a href="#" class="nav-link" data-section="inventario"><i class="fas fa-boxes"></i> Inventario</a>
+      <a href="#" class="nav-link" data-section="gastos"><i class="fas fa-receipt"></i> Gastos Op.</a>
+    </nav>
+    <div style="margin-top: auto; font-size:0.8rem; color: #a58d75;">© 2026 Café Matic</div>
+  </aside>
 
-    <div id="dashboard" class="section active">
-        <div class="container">
-            <div class="card">
-                <h2>📊 Hoy</h2>
-                <div class="grid2">
-                    <div class="metric"><div class="value" id="hoyVentas">0</div><div class="label">Ventas Bs</div></div>
-                    <div class="metric"><div class="value" id="hoyGanancia">0</div><div class="label">Ganancia Bs</div></div>
-                    <div class="metric"><div class="value" id="hoyMargen">0%</div><div class="label">Margen</div></div>
-                    <div class="metric"><div class="value" id="hoyVasos">0</div><div class="label">Vasos</div></div>
-                </div>
-            </div>
-            <div class="card">
-                <h2>⚖️ Punto de Equilibrio</h2>
-                <div class="metric"><span class="value" id="pEquilibrio">0</span><br><span class="label">vasos/mes para cubrir costos fijos</span></div>
-            </div>
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <!-- Selector de mes -->
+    <div class="top-bar">
+      <div></div>
+      <div class="month-selector">
+        <label for="monthPicker"><i class="far fa-calendar-alt"></i> Mes de trabajo:</label>
+        <input type="month" id="monthPicker">
+      </div>
+    </div>
+
+    <!-- Secciones dinámicas -->
+    <div id="dashboardSection">
+      <div class="section-title"><i class="fas fa-chart-pie"></i> Resumen del mes</div>
+      <div class="cards-grid" id="dashboardCards"></div>
+    </div>
+
+    <div id="ventasSection" class="hidden">
+      <div class="section-title"><i class="fas fa-coffee"></i> Ventas por producto</div>
+      <div class="panel">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" id="ventaFecha">
+          </div>
+          <div class="form-group">
+            <label>Café (6 Bs)</label>
+            <input type="number" id="ventaCafe" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label>Chocolate (7 Bs)</label>
+            <input type="number" id="ventaChoco" value="0" min="0" step="1">
+          </div>
+          <div class="form-group">
+            <label>Capuchino (8 Bs)</label>
+            <input type="number" id="ventaCapu" value="0" min="0" step="1">
+          </div>
+          <button class="btn" id="btnAddVenta"><i class="fas fa-plus-circle"></i> Registrar</button>
         </div>
+        <table id="tablaVentas">
+          <thead><tr><th>Fecha</th><th>Café</th><th>Chocolate</th><th>Capuchino</th><th>Total Bs</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="mt-2"><strong>Total vasos:</strong> <span id="totalVasos">0</span> | <strong>Ingreso esperado:</strong> Bs <span id="totalIngresoVentas">0.00</span></div>
+      </div>
     </div>
 
-    <div id="ventas" class="section">
-        <div class="container">
-            <div class="card">
-                <h2>📝 Registrar Venta</h2>
-                <label>Fecha</label><input type="date" id="fechaVenta">
-                <div id="productosVenta"></div>
-                <button class="btn" onclick="registrarVenta()">💾 Guardar</button>
-            </div>
-            <div class="card">
-                <h2>📋 Historial</h2>
-                <div id="historialVentas"></div>
-            </div>
+    <div id="efectivoSection" class="hidden">
+      <div class="section-title"><i class="fas fa-money-bill-wave"></i> Recaudaciones en efectivo</div>
+      <div class="panel">
+        <div class="form-row">
+          <div class="form-group"><label>Fecha</label><input type="date" id="efectivoFecha"></div>
+          <div class="form-group"><label>Monto (Bs)</label><input type="number" id="efectivoMonto" step="0.01" min="0"></div>
+          <button class="btn" id="btnAddEfectivo"><i class="fas fa-plus-circle"></i> Agregar</button>
         </div>
+        <table id="tablaEfectivo">
+          <thead><tr><th>Fecha</th><th>Monto Bs</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="mt-2"><strong>Total recaudado:</strong> Bs <span id="totalEfectivo">0.00</span></div>
+      </div>
     </div>
 
-    <div id="gastos" class="section">
-        <div class="container">
-            <div class="card">
-                <h2>🧾 Gastos Operativos</h2>
-                <label>Descripción</label><input id="descGasto" placeholder="Alquiler, pasajes...">
-                <label>Monto (Bs)</label><input type="number" id="montoGasto" step="0.01">
-                <label>Fecha</label><input type="date" id="fechaGasto">
-                <button class="btn" onclick="registrarGasto()">➕ Añadir</button>
-                <div id="listaGastos" style="margin-top:15px;"></div>
-            </div>
+    <div id="comprasSection" class="hidden">
+      <div class="section-title"><i class="fas fa-shopping-cart"></i> Compras de insumos</div>
+      <div class="panel">
+        <div class="form-row">
+          <div class="form-group"><label>Fecha</label><input type="date" id="compraFecha"></div>
+          <div class="form-group">
+            <label>Insumo</label>
+            <select id="compraInsumo">
+              <option value="cafe">Café</option>
+              <option value="cocoa">Cocoa</option>
+              <option value="azucar">Azúcar</option>
+              <option value="leche">Leche</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Gramos</label><input type="number" id="compraGramos" min="0.1" step="any"></div>
+          <div class="form-group"><label>Costo total (Bs)</label><input type="number" id="compraCosto" step="0.01" min="0"></div>
+          <button class="btn" id="btnAddCompra"><i class="fas fa-plus-circle"></i> Registrar</button>
         </div>
+        <table id="tablaCompras">
+          <thead><tr><th>Fecha</th><th>Insumo</th><th>Gramos</th><th>Costo Bs</th><th>Bs/gramo</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="mt-2"><strong>Total compras del mes:</strong> Bs <span id="totalCompras">0.00</span></div>
+      </div>
     </div>
 
-    <div class="nav">
-        <button onclick="showSection('dashboard')" class="active" id="btnDash">🏠 Inicio</button>
-        <button onclick="showSection('ventas')" id="btnVentas">📈 Ventas</button>
-        <button onclick="showSection('gastos')" id="btnGastos">💸 Gastos</button>
+    <div id="inventarioSection" class="hidden">
+      <div class="section-title"><i class="fas fa-boxes"></i> Inventario y costo de ventas</div>
+      <div class="inventory-grid">
+        <div class="panel">
+          <h3 style="margin-bottom:1rem;">📥 Inventario Inicial</h3>
+          <div id="invInicialForm"></div>
+        </div>
+        <div class="panel">
+          <h3 style="margin-bottom:1rem;">📤 Inventario Final</h3>
+          <div id="invFinalForm"></div>
+        </div>
+      </div>
+      <div style="margin-top:1.5rem; display:flex; gap:1rem; align-items:center;">
+        <button class="btn" id="btnCalcularCosto"><i class="fas fa-calculator"></i> Calcular costo de ventas</button>
+        <span id="costoVentasResult" style="font-weight:600;"></span>
+      </div>
     </div>
 
-    <script>
-        // ----- DATOS PRECARGADOS (RECETAS Y COSTOS) -----
-        const productos = [
-            { nombre: 'Café', precio: 6.00, costo: 2.45 },
-            { nombre: 'Chocolate con Leche', precio: 7.00, costo: 2.38 },
-            { nombre: 'Capuchino', precio: 8.00, costo: 3.68 }
-        ];
+    <div id="gastosSection" class="hidden">
+      <div class="section-title"><i class="fas fa-receipt"></i> Gastos operativos</div>
+      <div class="panel">
+        <div class="form-row">
+          <div class="form-group"><label>Fecha</label><input type="date" id="gastoFecha"></div>
+          <div class="form-group"><label>Descripción</label><input type="text" id="gastoDesc" placeholder="Ej: Alquiler"></div>
+          <div class="form-group"><label>Monto Bs</label><input type="number" id="gastoMonto" step="0.01" min="0"></div>
+          <button class="btn" id="btnAddGasto"><i class="fas fa-plus-circle"></i> Agregar</button>
+        </div>
+        <table id="tablaGastos">
+          <thead><tr><th>Fecha</th><th>Descripción</th><th>Monto Bs</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="mt-2"><strong>Total gastos operativos:</strong> Bs <span id="totalGastos">0.00</span></div>
+      </div>
+    </div>
+  </main>
 
-        // ----- FUNCIONES DE ALMACENAMIENTO LOCAL -----
-        function guardar(clave, datos) { localStorage.setItem(clave, JSON.stringify(datos)); }
-        function cargar(clave) { return JSON.parse(localStorage.getItem(clave)) || []; }
+  <script>
+    (function() {
+      // ---------- DATOS ----------
+      const STORAGE_KEY = 'cafeMaticData';
+      let appData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { months: {} };
 
-        // ----- NAVEGACIÓN -----
-        function showSection(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.getElementById('btn' + id.charAt(0).toUpperCase() + id.slice(1)).classList.add('active');
-            if (id === 'dashboard') actualizarDashboard();
-            if (id === 'ventas') { generarFormularioVenta(); mostrarHistorial(); }
-            if (id === 'gastos') mostrarGastos();
-        }
+      const PRECIOS = { cafe: 6, chocolate: 7, capuchino: 8 };
+      const INSUMOS = ['cafe', 'cocoa', 'azucar', 'leche'];
+      const INSUMO_LABELS = { cafe: 'Café', cocoa: 'Cocoa', azucar: 'Azúcar', leche: 'Leche' };
 
-        // ----- VENTAS -----
-        function generarFormularioVenta() {
-            const div = document.getElementById('productosVenta');
-            div.innerHTML = productos.map((p, i) => `
-                <label>${p.nombre} (Bs ${p.precio.toFixed(2)})</label>
-                <input type="number" id="vasos_${i}" placeholder="Vasos vendidos" min="0" value="0">
-                <input type="number" id="efectivo_${i}" placeholder="Efectivo recaudado (Bs)" step="0.01" value="0">
-                <div id="diff_${i}" style="color:red;font-size:0.8rem;"></div>
-                <input type="text" id="nota_${i}" placeholder="Nota por diferencia (opcional)">
-                <hr>
-            `).join('');
-            document.getElementById('fechaVenta').value = new Date().toISOString().split('T')[0];
+      let currentMonth = new Date().toISOString().slice(0,7); // YYYY-MM
+      const monthPicker = document.getElementById('monthPicker');
+      monthPicker.value = currentMonth;
 
-            // Calcular diferencias en tiempo real
-            for (let i = 0; i < productos.length; i++) {
-                document.getElementById(`vasos_${i}`).addEventListener('input', () => calcDiff(i));
-                document.getElementById(`efectivo_${i}`).addEventListener('input', () => calcDiff(i));
+      // Asegurar mes en datos
+      function ensureMonth(month) {
+        if (!appData.months[month]) {
+          appData.months[month] = {
+            ventas: [],
+            efectivo: [],
+            compras: [],
+            gastos: [],
+            inventario: {
+              inicial: { cafe:{grams:0, value:0}, cocoa:{grams:0, value:0}, azucar:{grams:0, value:0}, leche:{grams:0, value:0} },
+              final: { cafe:{grams:0, value:0}, cocoa:{grams:0, value:0}, azucar:{grams:0, value:0}, leche:{grams:0, value:0} },
+              costoVentas: null
             }
+          };
         }
+      }
+      ensureMonth(currentMonth);
 
-        function calcDiff(i) {
-            const vasos = parseInt(document.getElementById(`vasos_${i}`).value) || 0;
-            const efectivo = parseFloat(document.getElementById(`efectivo_${i}`).value) || 0;
-            const esperado = vasos * productos[i].precio;
-            const diff = efectivo - esperado;
-            document.getElementById(`diff_${i}`).innerText = diff !== 0 ? `Diferencia: Bs ${diff.toFixed(2)}` : '';
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+      }
+
+      // Navegación
+      const sections = {
+        dashboard: document.getElementById('dashboardSection'),
+        ventas: document.getElementById('ventasSection'),
+        efectivo: document.getElementById('efectivoSection'),
+        compras: document.getElementById('comprasSection'),
+        inventario: document.getElementById('inventarioSection'),
+        gastos: document.getElementById('gastosSection')
+      };
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      function showSection(sectionId) {
+        Object.values(sections).forEach(sec => sec.classList.add('hidden'));
+        sections[sectionId].classList.remove('hidden');
+        navLinks.forEach(link => link.classList.remove('active'));
+        document.querySelector(`.nav-link[data-section="${sectionId}"]`).classList.add('active');
+        if (sectionId === 'dashboard') renderDashboard();
+        else if (sectionId === 'ventas') renderVentas();
+        else if (sectionId === 'efectivo') renderEfectivo();
+        else if (sectionId === 'compras') renderCompras();
+        else if (sectionId === 'inventario') renderInventario();
+        else if (sectionId === 'gastos') renderGastos();
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          showSection(link.dataset.section);
+        });
+      });
+
+      monthPicker.addEventListener('change', (e) => {
+        currentMonth = e.target.value;
+        ensureMonth(currentMonth);
+        const active = document.querySelector('.nav-link.active');
+        if (active) showSection(active.dataset.section);
+        else showSection('dashboard');
+      });
+
+      // ---------- VENTAS ----------
+      function renderVentas() {
+        const data = appData.months[currentMonth];
+        const tbody = document.querySelector('#tablaVentas tbody');
+        tbody.innerHTML = '';
+        let totalVasos = 0, totalIngreso = 0;
+        data.ventas.forEach((v, idx) => {
+          const ingreso = v.cafe*PRECIOS.cafe + v.chocolate*PRECIOS.chocolate + v.capuchino*PRECIOS.capuchino;
+          totalVasos += v.cafe + v.chocolate + v.capuchino;
+          totalIngreso += ingreso;
+          tbody.innerHTML += `<tr>
+            <td>${v.fecha}</td>
+            <td>${v.cafe}</td><td>${v.chocolate}</td><td>${v.capuchino}</td>
+            <td>Bs ${ingreso.toFixed(2)}</td>
+            <td><button class="btn btn-danger btn-sm" data-idx="${idx}" data-type="venta"><i class="fas fa-trash"></i></button></td>
+          </tr>`;
+        });
+        document.getElementById('totalVasos').textContent = totalVasos;
+        document.getElementById('totalIngresoVentas').textContent = totalIngreso.toFixed(2);
+      }
+
+      document.getElementById('btnAddVenta').addEventListener('click', () => {
+        const fecha = document.getElementById('ventaFecha').value;
+        const cafe = parseInt(document.getElementById('ventaCafe').value) || 0;
+        const choco = parseInt(document.getElementById('ventaChoco').value) || 0;
+        const capu = parseInt(document.getElementById('ventaCapu').value) || 0;
+        if (!fecha || (cafe+choco+capu === 0)) return alert('Ingrese fecha y al menos un vaso.');
+        appData.months[currentMonth].ventas.push({ fecha, cafe, chocolate: choco, capuchino: capu });
+        saveData();
+        renderVentas();
+        document.getElementById('ventaCafe').value = 0;
+        document.getElementById('ventaChoco').value = 0;
+        document.getElementById('ventaCapu').value = 0;
+      });
+
+      // ---------- EFECTIVO ----------
+      function renderEfectivo() {
+        const data = appData.months[currentMonth];
+        const tbody = document.querySelector('#tablaEfectivo tbody');
+        tbody.innerHTML = '';
+        let total = 0;
+        data.efectivo.forEach((e, idx) => {
+          total += e.monto;
+          tbody.innerHTML += `<tr><td>${e.fecha}</td><td>Bs ${e.monto.toFixed(2)}</td><td><button class="btn btn-danger btn-sm" data-idx="${idx}" data-type="efectivo"><i class="fas fa-trash"></i></button></td></tr>`;
+        });
+        document.getElementById('totalEfectivo').textContent = total.toFixed(2);
+      }
+
+      document.getElementById('btnAddEfectivo').addEventListener('click', () => {
+        const fecha = document.getElementById('efectivoFecha').value;
+        const monto = parseFloat(document.getElementById('efectivoMonto').value);
+        if (!fecha || isNaN(monto) || monto <= 0) return alert('Complete fecha y monto válido.');
+        appData.months[currentMonth].efectivo.push({ fecha, monto });
+        saveData();
+        renderEfectivo();
+        document.getElementById('efectivoMonto').value = '';
+      });
+
+      // ---------- COMPRAS ----------
+      function renderCompras() {
+        const data = appData.months[currentMonth];
+        const tbody = document.querySelector('#tablaCompras tbody');
+        tbody.innerHTML = '';
+        let total = 0;
+        data.compras.forEach((c, idx) => {
+          const unitario = c.grams > 0 ? (c.costo / c.grams) : 0;
+          total += c.costo;
+          tbody.innerHTML += `<tr>
+            <td>${c.fecha}</td><td>${INSUMO_LABELS[c.insumo]}</td><td>${c.grams.toFixed(1)}</td>
+            <td>Bs ${c.costo.toFixed(2)}</td><td>Bs ${unitario.toFixed(4)}</td>
+            <td><button class="btn btn-danger btn-sm" data-idx="${idx}" data-type="compra"><i class="fas fa-trash"></i></button></td>
+          </tr>`;
+        });
+        document.getElementById('totalCompras').textContent = total.toFixed(2);
+      }
+
+      document.getElementById('btnAddCompra').addEventListener('click', () => {
+        const fecha = document.getElementById('compraFecha').value;
+        const insumo = document.getElementById('compraInsumo').value;
+        const grams = parseFloat(document.getElementById('compraGramos').value);
+        const costo = parseFloat(document.getElementById('compraCosto').value);
+        if (!fecha || isNaN(grams) || grams <= 0 || isNaN(costo) || costo < 0) return alert('Complete todos los campos correctamente.');
+        appData.months[currentMonth].compras.push({ fecha, insumo, grams, costo });
+        saveData();
+        renderCompras();
+        document.getElementById('compraGramos').value = '';
+        document.getElementById('compraCosto').value = '';
+      });
+
+      // ---------- INVENTARIO ----------
+      function renderInventario() {
+        const inv = appData.months[currentMonth].inventario;
+        const inicialDiv = document.getElementById('invInicialForm');
+        const finalDiv = document.getElementById('invFinalForm');
+        inicialDiv.innerHTML = buildInventoryForm('inicial', inv.inicial);
+        finalDiv.innerHTML = buildInventoryForm('final', inv.final);
+        const costo = inv.costoVentas;
+        document.getElementById('costoVentasResult').innerHTML = costo !== null ? `Costo de ventas calculado: <strong>Bs ${costo.toFixed(2)}</strong>` : '';
+      }
+
+      function buildInventoryForm(tipo, valores) {
+        return INSUMOS.map(ins => `
+          <div style="display:flex; gap:0.5rem; margin-bottom:0.6rem; align-items:center;">
+            <span style="width:70px;">${INSUMO_LABELS[ins]}</span>
+            <input type="number" placeholder="Gramos" value="${valores[ins].grams}" data-ins="${ins}" data-tipo="${tipo}" data-field="grams" step="any" min="0" style="width:100px;">
+            <input type="number" placeholder="Valor Bs" value="${valores[ins].value}" data-ins="${ins}" data-tipo="${tipo}" data-field="value" step="0.01" min="0" style="width:110px;">
+          </div>
+        `).join('');
+      }
+
+      document.addEventListener('change', (e) => {
+        if (e.target.dataset.ins && e.target.dataset.tipo && e.target.dataset.field) {
+          const ins = e.target.dataset.ins;
+          const tipo = e.target.dataset.tipo;
+          const field = e.target.dataset.field;
+          const val = parseFloat(e.target.value) || 0;
+          appData.months[currentMonth].inventario[tipo][ins][field] = val;
+          saveData();
         }
+      });
 
-        function registrarVenta() {
-            const fecha = document.getElementById('fechaVenta').value;
-            if (!fecha) return alert('Selecciona una fecha');
-            const ventas = cargar('ventas');
-            for (let i = 0; i < productos.length; i++) {
-                const vasos = parseInt(document.getElementById(`vasos_${i}`).value) || 0;
-                const efectivo = parseFloat(document.getElementById(`efectivo_${i}`).value) || 0;
-                const nota = document.getElementById(`nota_${i}`).value;
-                ventas.push({ fecha, producto: productos[i].nombre, vasos, efectivo, esperado: vasos * productos[i].precio, nota });
-            }
-            guardar('ventas', ventas);
-            alert('Venta registrada');
-            generarFormularioVenta();
-            mostrarHistorial();
+      document.getElementById('btnCalcularCosto').addEventListener('click', () => {
+        const inv = appData.months[currentMonth].inventario;
+        let totalInicial = 0, totalFinal = 0;
+        INSUMOS.forEach(ins => {
+          totalInicial += inv.inicial[ins].value || 0;
+          totalFinal += inv.final[ins].value || 0;
+        });
+        const comprasMes = appData.months[currentMonth].compras.reduce((sum, c) => sum + c.costo, 0);
+        const costoVentas = totalInicial + comprasMes - totalFinal;
+        inv.costoVentas = costoVentas;
+        saveData();
+        document.getElementById('costoVentasResult').innerHTML = `Costo de ventas calculado: <strong>Bs ${costoVentas.toFixed(2)}</strong>`;
+      });
+
+      // ---------- GASTOS ----------
+      function renderGastos() {
+        const data = appData.months[currentMonth];
+        const tbody = document.querySelector('#tablaGastos tbody');
+        tbody.innerHTML = '';
+        let total = 0;
+        data.gastos.forEach((g, idx) => {
+          total += g.monto;
+          tbody.innerHTML += `<tr><td>${g.fecha}</td><td>${g.desc}</td><td>Bs ${g.monto.toFixed(2)}</td><td><button class="btn btn-danger btn-sm" data-idx="${idx}" data-type="gasto"><i class="fas fa-trash"></i></button></td></tr>`;
+        });
+        document.getElementById('totalGastos').textContent = total.toFixed(2);
+      }
+
+      document.getElementById('btnAddGasto').addEventListener('click', () => {
+        const fecha = document.getElementById('gastoFecha').value;
+        const desc = document.getElementById('gastoDesc').value.trim();
+        const monto = parseFloat(document.getElementById('gastoMonto').value);
+        if (!fecha || !desc || isNaN(monto) || monto <=0) return alert('Complete todos los campos.');
+        appData.months[currentMonth].gastos.push({ fecha, desc, monto });
+        saveData();
+        renderGastos();
+        document.getElementById('gastoDesc').value = '';
+        document.getElementById('gastoMonto').value = '';
+      });
+
+      // ---------- ELIMINACIONES GENÉRICAS ----------
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('button[data-type]')) {
+          const btn = e.target.closest('button');
+          const tipo = btn.dataset.type;
+          const idx = parseInt(btn.dataset.idx);
+          const mes = appData.months[currentMonth];
+          if (tipo === 'venta') mes.ventas.splice(idx,1);
+          else if (tipo === 'efectivo') mes.efectivo.splice(idx,1);
+          else if (tipo === 'compra') mes.compras.splice(idx,1);
+          else if (tipo === 'gasto') mes.gastos.splice(idx,1);
+          saveData();
+          // Refrescar sección activa
+          const active = document.querySelector('.nav-link.active');
+          if (active) showSection(active.dataset.section);
         }
+      });
 
-        function mostrarHistorial() {
-            const ventas = cargar('ventas');
-            const div = document.getElementById('historialVentas');
-            if (ventas.length === 0) { div.innerHTML = '<p>No hay ventas aún.</p>'; return; }
-            const agrupado = {};
-            ventas.forEach(v => { if (!agrupado[v.fecha]) agrupado[v.fecha] = []; agrupado[v.fecha].push(v); });
-            div.innerHTML = Object.keys(agrupado).sort().reverse().map(fecha => {
-                const totalVasos = agrupado[fecha].reduce((s, v) => s + v.vasos, 0);
-                const totalEfectivo = agrupado[fecha].reduce((s, v) => s + v.efectivo, 0);
-                return `<p><b>${fecha}</b> - ${totalVasos} vasos, Bs ${totalEfectivo.toFixed(2)}</p>`;
-            }).join('');
-        }
+      // ---------- DASHBOARD ----------
+      function renderDashboard() {
+        const mes = appData.months[currentMonth];
+        const ventas = mes.ventas;
+        let ingresosVentas = 0, totalVasos = 0;
+        ventas.forEach(v => {
+          ingresosVentas += v.cafe*6 + v.chocolate*7 + v.capuchino*8;
+          totalVasos += v.cafe + v.chocolate + v.capuchino;
+        });
+        const efectivoTotal = mes.efectivo.reduce((s,e)=> s+e.monto,0);
+        const comprasTotal = mes.compras.reduce((s,c)=> s+c.costo,0);
+        const gastosTotal = mes.gastos.reduce((s,g)=> s+g.monto,0);
+        const costoVentas = mes.inventario.costoVentas;
+        const utilidadBruta = costoVentas !== null ? ingresosVentas - costoVentas : null;
+        const utilidadNeta = utilidadBruta !== null ? utilidadBruta - gastosTotal : null;
 
-        // ----- GASTOS -----
-        function registrarGasto() {
-            const desc = document.getElementById('descGasto').value;
-            const monto = parseFloat(document.getElementById('montoGasto').value);
-            const fecha = document.getElementById('fechaGasto').value;
-            if (!desc || !monto || !fecha) return alert('Completa todos los campos');
-            const gastos = cargar('gastos');
-            gastos.push({ desc, monto, fecha });
-            guardar('gastos', gastos);
-            document.getElementById('descGasto').value = '';
-            document.getElementById('montoGasto').value = '';
-            mostrarGastos();
-        }
+        document.getElementById('dashboardCards').innerHTML = `
+          <div class="card"><div class="label">Ingresos por ventas</div><div class="value">Bs ${ingresosVentas.toFixed(2)}</div><div class="sub">${totalVasos} vasos</div></div>
+          <div class="card"><div class="label">Efectivo recaudado</div><div class="value">Bs ${efectivoTotal.toFixed(2)}</div></div>
+          <div class="card"><div class="label">Costo de ventas</div><div class="value">${costoVentas !== null ? 'Bs '+costoVentas.toFixed(2) : '—'}</div></div>
+          <div class="card"><div class="label">Utilidad Bruta</div><div class="value ${utilidadBruta !== null ? (utilidadBruta>=0?'profit-positive':'profit-negative') : ''}">${utilidadBruta !== null ? 'Bs '+utilidadBruta.toFixed(2) : '—'}</div></div>
+          <div class="card"><div class="label">Gastos operativos</div><div class="value">Bs ${gastosTotal.toFixed(2)}</div></div>
+          <div class="card"><div class="label">Utilidad Neta</div><div class="value ${utilidadNeta !== null ? (utilidadNeta>=0?'profit-positive':'profit-negative') : ''}">${utilidadNeta !== null ? 'Bs '+utilidadNeta.toFixed(2) : '—'}</div></div>
+        `;
+      }
 
-        function mostrarGastos() {
-            const gastos = cargar('gastos');
-            const div = document.getElementById('listaGastos');
-            if (gastos.length === 0) { div.innerHTML = '<p>No hay gastos registrados.</p>'; return; }
-            div.innerHTML = '<table><tr><th>Descripción</th><th>Monto</th><th>Fecha</th></tr>' +
-                gastos.map(g => `<tr><td>${g.desc}</td><td>Bs ${g.monto.toFixed(2)}</td><td>${g.fecha}</td></tr>`).join('') + '</table>';
-        }
+      // Inicializar fecha actual en inputs de fecha
+      const today = new Date().toISOString().slice(0,10);
+      document.getElementById('ventaFecha').value = today;
+      document.getElementById('efectivoFecha').value = today;
+      document.getElementById('compraFecha').value = today;
+      document.getElementById('gastoFecha').value = today;
 
-        // ----- DASHBOARD -----
-        function actualizarDashboard() {
-            const ventas = cargar('ventas');
-            const gastos = cargar('gastos');
-            const hoy = new Date().toISOString().split('T')[0];
-
-            const ventasHoy = ventas.filter(v => v.fecha === hoy);
-            const totalVasos = ventasHoy.reduce((s, v) => s + v.vasos, 0);
-            const totalEfectivo = ventasHoy.reduce((s, v) => s + v.efectivo, 0);
-            const costoTotal = ventasHoy.reduce((s, v) => {
-                const prod = productos.find(p => p.nombre === v.producto);
-                return s + (prod ? prod.costo * v.vasos : 0);
-            }, 0);
-            const ganancia = totalEfectivo - costoTotal;
-            const margen = totalEfectivo > 0 ? ((ganancia / totalEfectivo) * 100).toFixed(1) : 0;
-
-            document.getElementById('hoyVentas').innerText = totalEfectivo.toFixed(2);
-            document.getElementById('hoyGanancia').innerText = ganancia.toFixed(2);
-            document.getElementById('hoyMargen').innerText = margen + '%';
-            document.getElementById('hoyVasos').innerText = totalVasos;
-
-            // Punto de equilibrio mensual
-            const gastosFijos = gastos.reduce((s, g) => s + g.monto, 0);
-            const margenPromedio = productos.reduce((s, p) => s + (p.precio - p.costo), 0) / productos.length;
-            const equilibrio = margenPromedio > 0 ? Math.ceil(gastosFijos / margenPromedio) : 0;
-            document.getElementById('pEquilibrio').innerText = equilibrio;
-        }
-
-        // ----- INICIALIZAR -----
-        document.getElementById('fechaGasto').value = new Date().toISOString().split('T')[0];
-        mostrarGastos();
-        actualizarDashboard();
-    </script>
+      // Cargar sección inicial
+      showSection('dashboard');
+    })();
+  </script>
 </body>
-</html> 
+</html>
