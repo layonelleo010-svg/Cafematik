@@ -12,90 +12,17 @@
   <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #f5f0eb;
-      color: #3e2c1c;
-      display: flex;
-      min-height: 100vh;
-      padding-bottom: 80px;
-    }
-    .sidebar {
-      width: 270px;
-      background: #2c1e14;
-      color: #e7d7c4;
-      display: flex;
-      flex-direction: column;
-      padding: 2rem 1rem;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.2);
-      position: fixed;
-      top:0; left:0; bottom:0;
-      z-index:100;
-      transition: transform 0.3s;
-    }
-    .sidebar .logo {
-      font-size: 1.7rem;
-      font-weight: 700;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: #d4b68a;
-    }
-    .sidebar nav a {
-      display: flex;
-      align-items: center;
-      gap:0.8rem;
-      padding:0.9rem 1rem;
-      border-radius:12px;
-      color:#e7d7c4;
-      text-decoration:none;
-      font-weight:500;
-      margin-bottom:0.3rem;
-    }
+    body { font-family: 'Inter', sans-serif; background: #f5f0eb; color: #3e2c1c; display: flex; min-height: 100vh; padding-bottom: 80px; }
+    .sidebar { width: 280px; background: #2c1e14; color: #e7d7c4; display: flex; flex-direction: column; padding: 2rem 1rem; box-shadow: 4px 0 20px rgba(0,0,0,0.2); position: fixed; top:0; left:0; bottom:0; z-index:100; }
+    .sidebar .logo { font-size: 1.7rem; font-weight: 700; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem; color: #d4b68a; }
+    .sidebar nav a { display: flex; align-items: center; gap:0.8rem; padding:0.9rem 1rem; border-radius:12px; color:#e7d7c4; text-decoration:none; font-weight:500; margin-bottom:0.3rem; }
     .sidebar nav a:hover { background:#4a3727; }
     .sidebar nav a.active { background:#c8a27a; color:#2c1e14; font-weight:600; }
-    .main-content {
-      margin-left:270px;
-      flex:1;
-      padding:1.5rem 2rem;
-      max-width:1300px;
-      width:100%;
-    }
-    .top-bar {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-      gap:1rem;
-      margin-bottom:2rem;
-    }
-    .month-selector {
-      display:flex;
-      align-items:center;
-      gap:0.8rem;
-      background:#fff;
-      padding:0.5rem 1.2rem;
-      border-radius:40px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.04);
-    }
-    .btn {
-      background:#c8a27a;
-      border:none;
-      color:#2c1e14;
-      font-weight:600;
-      padding:0.7rem 1.5rem;
-      border-radius:30px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      gap:0.5rem;
-      white-space:nowrap;
-      font-size:0.9rem;
-    }
+    .main-content { margin-left:280px; flex:1; padding:1.5rem 2rem; max-width:1300px; width:100%; }
+    .top-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:2rem; }
+    .btn { background:#c8a27a; border:none; color:#2c1e14; font-weight:600; padding:0.7rem 1.5rem; border-radius:30px; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; white-space:nowrap; font-size:0.9rem; }
     .btn-outline { background:transparent; border:1px solid #c8a27a; color:#5a4a3a; }
     .btn-export { background:#2c1e14; color:#e7d7c4; }
-    .btn-historical { background:#4a3727; color:#e7d7c4; }
     .section-title { font-size:1.7rem; font-weight:600; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.6rem; }
     .section-title i { color:#c8a27a; }
     .cards-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap:1rem; margin-bottom:1.5rem; }
@@ -106,29 +33,16 @@
     .form-row { display:flex; flex-wrap:wrap; gap:0.8rem; align-items:flex-end; margin-bottom:1rem; }
     .form-group { display:flex; flex-direction:column; gap:0.3rem; min-width:120px; flex:1; }
     .form-group label { font-weight:500; font-size:0.8rem; }
-    .form-group input, .form-group select {
-      padding:0.65rem 0.8rem; border:1px solid #ddd2c4; border-radius:14px; background:#fefcf8; width:100%;
-    }
+    .form-group input, .form-group select { padding:0.65rem 0.8rem; border:1px solid #ddd2c4; border-radius:14px; background:#fefcf8; width:100%; }
     table { width:100%; border-collapse:collapse; min-width:700px; }
     th { text-align:left; padding:0.7rem 0.5rem; font-weight:600; border-bottom:2px solid #e4d5c2; }
     td { padding:0.7rem 0.5rem; border-bottom:1px solid #f0e5d8; }
     .hidden { display:none !important; }
-    .bottom-nav {
-      display:none;
-      position:fixed; bottom:0; left:0; right:0;
-      background:#2c1e14; justify-content:space-around; height:70px; z-index:200;
-    }
-    .bottom-nav a {
-      color:#c8b092; display:flex; flex-direction:column; align-items:center; font-size:0.65rem; padding:0.5rem 0.2rem; text-decoration:none;
-    }
+    .bottom-nav { display:none; position:fixed; bottom:0; left:0; right:0; background:#2c1e14; justify-content:space-around; height:70px; z-index:200; }
+    .bottom-nav a { color:#c8b092; display:flex; flex-direction:column; align-items:center; font-size:0.65rem; padding:0.5rem 0.2rem; text-decoration:none; }
     .bottom-nav a i { font-size:1.2rem; }
     .bottom-nav a.active { color:#fff; }
-    @media (max-width:768px) {
-      .sidebar { display:none; }
-      .main-content { margin-left:0; padding:1rem; }
-      .bottom-nav { display:flex; }
-    }
-    .chart-container { margin-bottom:1.5rem; background:#fff; border-radius:20px; padding:1.5rem; }
+    @media (max-width:768px) { .sidebar { display:none; } .main-content { margin-left:0; padding:1rem; } .bottom-nav { display:flex; } }
   </style>
 </head>
 <body>
@@ -141,8 +55,12 @@
     <a href="#" class="nav-link" data-section="compras"><i class="fas fa-shopping-cart"></i> Compras</a>
     <a href="#" class="nav-link" data-section="inventario"><i class="fas fa-boxes"></i> Inventario</a>
     <a href="#" class="nav-link" data-section="gastos"><i class="fas fa-receipt"></i> Gastos Op.</a>
+    <a href="#" class="nav-link" data-section="historial"><i class="fas fa-history"></i> Historial</a>
   </nav>
-  <button class="btn btn-historical" id="btnLoadHistoricalSide" style="margin-top:auto; width:100%;">Cargar datos históricos</button>
+  <div style="margin-top:auto; display:flex; flex-direction:column; gap:0.5rem;">
+    <button class="btn" id="btnLoadHistoricalSide" style="background:#4a3727; color:#e7d7c4; width:100%;"><i class="fas fa-database"></i> Cargar históricos</button>
+    <button class="btn" id="btnImportExcelSide" style="background:#4a3727; color:#e7d7c4; width:100%;"><i class="fas fa-file-upload"></i> Importar Excel</button>
+  </div>
 </aside>
 
 <div class="bottom-nav" id="bottomNav">
@@ -163,37 +81,30 @@
         <input type="month" id="monthPicker">
       </div>
       <button class="btn btn-export" id="btnExportExcel"><i class="fas fa-file-excel"></i> Exportar</button>
+      <button class="btn" id="btnImportExcelMain" style="background:#4a3727; color:#e7d7c4;"><i class="fas fa-file-upload"></i> Importar Excel</button>
     </div>
   </div>
-
-  <!-- Modal de exportación (oculto por defecto) -->
-  <div id="exportModal" class="hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:999;">
-    <div style="background:#fff; padding:2rem; border-radius:20px; width:90%; max-width:500px;">
-      <h3>Exportar a Excel</h3>
-      <div class="form-row">
-        <div class="form-group"><label>Desde</label><input type="date" id="exportFrom"></div>
-        <div class="form-group"><label>Hasta</label><input type="date" id="exportTo"></div>
-      </div>
-      <div style="display:flex; gap:1rem; justify-content:flex-end; margin-top:1rem; flex-wrap:wrap;">
-        <button class="btn btn-outline" id="btnExportMonth">Mes actual</button>
-        <button class="btn btn-outline" id="btnExportDay">Día seleccionado</button>
-        <button class="btn" id="btnExportRange">Rango</button>
-        <button class="btn btn-danger" id="btnCloseExport">Cerrar</button>
-      </div>
-    </div>
-  </div>
+  <input type="file" id="excelFileInput" accept=".xlsx, .xls" style="display:none;">
 
   <!-- Dashboard -->
   <div id="dashboardSection">
-    <div class="section-title"><i class="fas fa-chart-pie"></i> Resumen del mes</div>
-    <div style="margin-bottom:1rem;">
-      <button class="btn btn-historical" id="btnLoadHistoricalDash"><i class="fas fa-download"></i> Cargar datos históricos</button>
+    <div class="section-title"><i class="fas fa-chart-pie"></i> Resumen</div>
+    <div style="margin-bottom:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+      <button class="btn" id="btnLoadHistoricalDash"><i class="fas fa-database"></i> Cargar históricos</button>
+      <select id="dashboardMode" style="padding:0.5rem; border-radius:14px; border:1px solid #ddd2c4;">
+        <option value="month">Mes actual</option>
+        <option value="range">Rango de fechas</option>
+        <option value="all">Todos los meses</option>
+      </select>
+      <div id="rangeSelector" style="display:flex; gap:0.5rem; align-items:center;" class="hidden">
+        <input type="date" id="dashFrom" style="padding:0.5rem; border-radius:14px; border:1px solid #ddd2c4;">
+        <input type="date" id="dashTo" style="padding:0.5rem; border-radius:14px; border:1px solid #ddd2c4;">
+        <button class="btn" id="btnApplyRange">Aplicar</button>
+      </div>
     </div>
     <div class="cards-grid" id="dashboardCards"></div>
-    <div class="panel"><h3>Últimos días</h3><table id="dailySummaryTable"><thead><tr><th>Fecha</th><th>Vasos</th><th>Ingreso Bs</th><th>Efectivo Bs</th><th>Dif.</th><th>Obs.</th></tr></thead><tbody></tbody></table></div>
     <div class="chart-container"><canvas id="barChart"></canvas></div>
     <div class="chart-container" style="max-width:500px;"><canvas id="doughnutChart"></canvas></div>
-    <div class="chart-container"><canvas id="trendChart"></canvas></div>
   </div>
 
   <!-- Ventas -->
@@ -209,13 +120,12 @@
         <button class="btn" id="btnAddVenta"><i class="fas fa-plus-circle"></i> Registrar</button>
       </div>
       <div style="overflow-x:auto;"><table id="tablaVentas"><thead><tr><th>Fecha</th><th>Café</th><th>Choc.</th><th>Capu.</th><th>Total Bs</th><th>Obs.</th><th></th></tr></thead><tbody></tbody></table></div>
-      <div class="mt-2"><strong>Total vasos:</strong> <span id="totalVasos">0</span> | <strong>Ingreso:</strong> Bs <span id="totalIngresoVentas">0.00</span></div>
     </div>
   </div>
 
   <!-- Efectivo -->
   <div id="efectivoSection" class="hidden">
-    <div class="section-title"><i class="fas fa-money-bill-wave"></i> Recaudaciones en efectivo</div>
+    <div class="section-title"><i class="fas fa-money-bill-wave"></i> Recaudaciones</div>
     <div class="panel">
       <div class="form-row">
         <div class="form-group"><label>Fecha</label><input type="date" id="efectivoFecha"></div>
@@ -224,7 +134,6 @@
         <button class="btn" id="btnAddEfectivo"><i class="fas fa-plus-circle"></i> Agregar</button>
       </div>
       <div style="overflow-x:auto;"><table id="tablaEfectivo"><thead><tr><th>Fecha</th><th>Monto Bs</th><th>Obs.</th><th></th></tr></thead><tbody></tbody></table></div>
-      <div class="mt-2"><strong>Total recaudado:</strong> Bs <span id="totalEfectivo">0.00</span></div>
     </div>
   </div>
 
@@ -250,7 +159,6 @@
         <button class="btn" id="btnAddCompra"><i class="fas fa-plus-circle"></i> Registrar</button>
       </div>
       <div style="overflow-x:auto;"><table id="tablaCompras"><thead><tr><th>Fecha</th><th>Insumo</th><th>Cantidad</th><th>Unid.</th><th>Precio</th><th>Costo Unit.</th><th></th></tr></thead><tbody></tbody></table></div>
-      <div class="mt-2"><strong>Total compras:</strong> Bs <span id="totalCompras">0.00</span></div>
     </div>
   </div>
 
@@ -259,39 +167,43 @@
     <div class="section-title"><i class="fas fa-boxes"></i> Inventario y costo de ventas</div>
     <div style="display:flex; flex-wrap:wrap; gap:2rem;">
       <div class="panel" style="flex:1;"><h3>📥 Inventario Inicial</h3><div id="invInicialForm"></div></div>
-      <div class="panel" style="flex:1;"><h3>📤 Inventario Final</h3><div id="invFinalForm"></div></div>
+      <div class="panel" style="flex:1;"><h3>📤 Inventario Final (ingrese gramos)</h3><div id="invFinalForm"></div></div>
     </div>
     <div style="margin:1rem 0; display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-      <label>Método de costeo IF:</label>
-      <select id="metodoCosteo">
-        <option value="last">Último costo</option>
-        <option value="max">Costo más alto</option>
-        <option value="avg">Costo promedio</option>
-      </select>
-      <button class="btn" id="btnCalcularCosto"><i class="fas fa-calculator"></i> Calcular costo de ventas</button>
+      <label>Método costeo:</label>
+      <select id="metodoCosteo"><option value="avg">Costo promedio</option><option value="last">Último costo</option><option value="max">Más alto</option></select>
+      <button class="btn" id="btnCalcularCosto"><i class="fas fa-calculator"></i> Calcular</button>
       <span id="costoVentasResult" style="font-weight:600;"></span>
     </div>
   </div>
 
-  <!-- Gastos -->
+  <!-- Gastos Operativos -->
   <div id="gastosSection" class="hidden">
     <div class="section-title"><i class="fas fa-receipt"></i> Gastos operativos</div>
     <div class="panel">
       <div class="form-row">
         <div class="form-group"><label>Fecha</label><input type="date" id="gastoFecha"></div>
-        <div class="form-group"><label>Descripción</label><input type="text" id="gastoDesc"></div>
+        <div class="form-group"><label>Descripción</label>
+          <input type="text" id="gastoDesc" list="gastosSugeridos">
+          <datalist id="gastosSugeridos"></datalist>
+        </div>
         <div class="form-group"><label>Monto Bs</label><input type="number" id="gastoMonto" step="0.01" min="0"></div>
         <button class="btn" id="btnAddGasto"><i class="fas fa-plus-circle"></i> Agregar</button>
       </div>
       <div style="overflow-x:auto;"><table id="tablaGastos"><thead><tr><th>Fecha</th><th>Descripción</th><th>Monto</th><th></th></tr></thead><tbody></tbody></table></div>
-      <div class="mt-2"><strong>Total gastos:</strong> Bs <span id="totalGastos">0.00</span></div>
     </div>
+  </div>
+
+  <!-- Historial Mensual -->
+  <div id="historialSection" class="hidden">
+    <div class="section-title"><i class="fas fa-history"></i> Historial Mensual</div>
+    <div class="panel" style="overflow-x:auto;"><table id="historialTable"><thead><tr><th>Concepto</th></tr></thead><tbody></tbody></table></div>
   </div>
 </main>
 
 <script>
   (function() {
-    const STORAGE_KEY = 'cafeMaticV4';
+    const STORAGE_KEY = 'cafeMaticV5';
     const PRECIOS = { cafe:6, chocolate:7, capuchino:8 };
     const INSUMOS_BASE = ['Café','Cocoa Ceibo','Cocoa Celinda','Azúcar','Leche','Bicarbonato','Sal','Canela','Maicena','Lecitina','Ácido Cítrico','Vasos','Tapas','Agua','Cucharilla'];
     const UNIDAD_POR_DEFECTO = {
@@ -305,13 +217,32 @@
 
     function ensureMonth(m) {
       if (!appData.months[m]) {
+        // Copiar inventario final del mes anterior como inicial
+        const meses = Object.keys(appData.months).sort();
+        const idx = meses.indexOf(m);
+        let invInicial = {};
+        INSUMOS_BASE.forEach(ins => invInicial[ins] = { cantidad:0, valor:0, unidad: UNIDAD_POR_DEFECTO[ins] });
+        if (idx > 0) {
+          const prevMonth = meses[idx-1];
+          const prevFinal = appData.months[prevMonth].inventario.final;
+          if (prevFinal) {
+            INSUMOS_BASE.forEach(ins => {
+              if (prevFinal[ins]) {
+                invInicial[ins].cantidad = prevFinal[ins].cantidad || 0;
+                invInicial[ins].valor = 0; // se recalculará con costo promedio
+                invInicial[ins].unidad = prevFinal[ins].unidad || UNIDAD_POR_DEFECTO[ins];
+              }
+            });
+          }
+        }
         appData.months[m] = {
           ventas:[], efectivo:[], compras:[], gastos:[],
-          inventario: { inicial:{}, final:{}, costoVentas:null }
+          inventario: { inicial: invInicial, final:{}, costoVentas:null }
         };
         INSUMOS_BASE.forEach(ins => {
-          appData.months[m].inventario.inicial[ins] = { cantidad:0, valor:0, unidad: UNIDAD_POR_DEFECTO[ins] };
-          appData.months[m].inventario.final[ins] = { cantidad:0, unidad: UNIDAD_POR_DEFECTO[ins] };
+          if (!appData.months[m].inventario.final[ins]) {
+            appData.months[m].inventario.final[ins] = { cantidad:0, unidad: UNIDAD_POR_DEFECTO[ins] };
+          }
         });
       }
     }
@@ -325,12 +256,13 @@
       efectivo: document.getElementById('efectivoSection'),
       compras: document.getElementById('comprasSection'),
       inventario: document.getElementById('inventarioSection'),
-      gastos: document.getElementById('gastosSection')
+      gastos: document.getElementById('gastosSection'),
+      historial: document.getElementById('historialSection')
     };
     const navLinks = document.querySelectorAll('.nav-link, .nav-link-mobile');
     function showSection(id) {
       Object.values(sections).forEach(s => s.classList.add('hidden'));
-      sections[id].classList.remove('hidden');
+      if (sections[id]) sections[id].classList.remove('hidden');
       navLinks.forEach(l => l.classList.remove('active'));
       document.querySelectorAll(`[data-section="${id}"]`).forEach(l => l.classList.add('active'));
       switch(id) {
@@ -339,7 +271,8 @@
         case 'efectivo': renderEfectivo(); break;
         case 'compras': renderCompras(); break;
         case 'inventario': renderInventario(); break;
-        case 'gastos': renderGastos(); break;
+        case 'gastos': renderGastos(); updateSugerenciasGastos(); break;
+        case 'historial': renderHistorial(); break;
       }
     }
     navLinks.forEach(l => l.addEventListener('click', e => { e.preventDefault(); showSection(l.dataset.section); }));
@@ -349,68 +282,58 @@
       showSection(document.querySelector('.nav-link.active, .nav-link-mobile.active')?.dataset.section || 'dashboard');
     });
 
-    // ---- RENDERIZADOS ----
+    // Renderizados básicos (ventas, efectivo, compras, gastos) similares a la versión anterior...
     function renderVentas() {
       const d = appData.months[currentMonth];
       const tbody = document.querySelector('#tablaVentas tbody');
       tbody.innerHTML = '';
       let totalV=0, totalI=0;
-      d.ventas.forEach((v,i) => {
-        const ing = v.cafe*6 + v.chocolate*7 + v.capuchino*8;
-        totalV += v.cafe+v.chocolate+v.capuchino;
+      (d.ventas||[]).forEach((v,i) => {
+        const ing = (v.cafe||0)*6 + (v.chocolate||0)*7 + (v.capuchino||0)*8;
+        totalV += (v.cafe||0)+(v.chocolate||0)+(v.capuchino||0);
         totalI += ing;
-        tbody.innerHTML += `<tr>
-          <td>${v.fecha}</td><td>${v.cafe}</td><td>${v.chocolate}</td><td>${v.capuchino}</td>
-          <td>Bs ${ing.toFixed(2)}</td><td>${v.obs||''}</td>
-          <td><button class="btn btn-danger btn-sm" data-idx="${i}" data-type="venta"><i class="fas fa-trash"></i></button></td></tr>`;
+        tbody.innerHTML += `<tr><td>${v.fecha}</td><td>${v.cafe||0}</td><td>${v.chocolate||0}</td><td>${v.capuchino||0}</td><td>Bs ${ing.toFixed(2)}</td><td>${v.obs||''}</td><td><button class="btn btn-danger btn-sm" data-idx="${i}" data-type="venta"><i class="fas fa-trash"></i></button></td></tr>`;
       });
-      document.getElementById('totalVasos').textContent = totalV;
-      document.getElementById('totalIngresoVentas').textContent = totalI.toFixed(2);
     }
 
     function renderEfectivo() {
       const d = appData.months[currentMonth];
       const tbody = document.querySelector('#tablaEfectivo tbody');
       tbody.innerHTML = '';
-      let total=0;
-      d.efectivo.forEach((e,i) => {
-        total += e.monto;
+      (d.efectivo||[]).forEach((e,i) => {
         tbody.innerHTML += `<tr><td>${e.fecha}</td><td>Bs ${e.monto.toFixed(2)}</td><td>${e.obs||''}</td><td><button class="btn btn-danger btn-sm" data-idx="${i}" data-type="efectivo"><i class="fas fa-trash"></i></button></td></tr>`;
       });
-      document.getElementById('totalEfectivo').textContent = total.toFixed(2);
     }
 
     function renderCompras() {
       const d = appData.months[currentMonth];
       const tbody = document.querySelector('#tablaCompras tbody');
       tbody.innerHTML = '';
-      let total=0;
-      d.compras.forEach((c,i) => {
+      (d.compras||[]).forEach((c,i) => {
         const unit = c.cantidad ? (c.precio/c.cantidad) : 0;
-        total += c.precio;
-        tbody.innerHTML += `<tr>
-          <td>${c.fecha}</td><td>${c.insumo}</td><td>${c.cantidad}</td><td>${c.unidad}</td>
-          <td>Bs ${c.precio.toFixed(2)}</td><td>Bs/${c.unidad} ${unit.toFixed(4)}</td>
-          <td><button class="btn btn-danger btn-sm" data-idx="${i}" data-type="compra"><i class="fas fa-trash"></i></button></td></tr>`;
+        tbody.innerHTML += `<tr><td>${c.fecha}</td><td>${c.insumo}</td><td>${c.cantidad}</td><td>${c.unidad}</td><td>Bs ${c.precio.toFixed(2)}</td><td>Bs/${c.unidad} ${unit.toFixed(4)}</td><td><button class="btn btn-danger btn-sm" data-idx="${i}" data-type="compra"><i class="fas fa-trash"></i></button></td></tr>`;
       });
-      document.getElementById('totalCompras').textContent = total.toFixed(2);
     }
 
     function renderInventario() {
       const inv = appData.months[currentMonth].inventario;
-      document.getElementById('invInicialForm').innerHTML = INSUMOS_BASE.map(ins => `
-        <div style="display:flex; gap:0.3rem; margin-bottom:0.4rem; align-items:center;">
+      document.getElementById('invInicialForm').innerHTML = INSUMOS_BASE.map(ins => {
+        const ini = inv.inicial[ins] || { cantidad:0, valor:0, unidad:UNIDAD_POR_DEFECTO[ins] };
+        return `<div style="display:flex; gap:0.3rem; margin-bottom:0.4rem; align-items:center;">
           <span style="width:80px;">${ins}</span>
-          <input type="number" placeholder="Cantidad" value="${inv.inicial[ins].cantidad}" data-ins="${ins}" data-field="cantidad" data-tipo="inicial" step="any" style="width:80px;">
-          <input type="number" placeholder="Valor Bs" value="${inv.inicial[ins].valor}" data-ins="${ins}" data-field="valor" data-tipo="inicial" step="0.01" style="width:90px;">
-          <span style="font-size:0.7rem;">${inv.inicial[ins].unidad}</span>
-        </div>`).join('');
-      document.getElementById('invFinalForm').innerHTML = INSUMOS_BASE.map(ins => `
-        <div style="display:flex; gap:0.3rem; margin-bottom:0.4rem; align-items:center;">
+          <input type="number" placeholder="Cantidad" value="${ini.cantidad}" data-ins="${ins}" data-field="cantidad" data-tipo="inicial" step="any" style="width:80px;">
+          <input type="number" placeholder="Valor Bs" value="${ini.valor.toFixed(2)}" data-ins="${ins}" data-field="valor" data-tipo="inicial" step="0.01" style="width:90px;">
+          <span>${ini.unidad}</span>
+        </div>`;
+      }).join('');
+      document.getElementById('invFinalForm').innerHTML = INSUMOS_BASE.map(ins => {
+        const fin = inv.final[ins] || { cantidad:0, unidad:UNIDAD_POR_DEFECTO[ins] };
+        return `<div style="display:flex; gap:0.3rem; margin-bottom:0.4rem; align-items:center;">
           <span style="width:80px;">${ins}</span>
-          <input type="number" placeholder="Cantidad" value="${inv.final[ins].cantidad}" data-ins="${ins}" data-field="cantidad" data-tipo="final" step="any" style="width:80px;">
-          <span style="font-size:0.7rem;">${inv.final[ins].unidad}</span>
-        </div>`).join('');
+          <input type="number" placeholder="Gramos/L/unid" value="${fin.cantidad}" data-ins="${ins}" data-field="cantidad" data-tipo="final" step="any" style="width:80px;">
+          <span>${fin.unidad}</span>
+        </div>`;
+      }).join('');
       document.getElementById('costoVentasResult').innerHTML = inv.costoVentas ? `Costo de ventas: <strong>Bs ${inv.costoVentas.toFixed(2)}</strong>` : '';
     }
 
@@ -418,57 +341,61 @@
       const d = appData.months[currentMonth];
       const tbody = document.querySelector('#tablaGastos tbody');
       tbody.innerHTML = '';
-      let total=0;
-      d.gastos.forEach((g,i) => {
-        total += g.monto;
+      (d.gastos||[]).forEach((g,i) => {
         tbody.innerHTML += `<tr><td>${g.fecha}</td><td>${g.desc}</td><td>Bs ${g.monto.toFixed(2)}</td><td><button class="btn btn-danger btn-sm" data-idx="${i}" data-type="gasto"><i class="fas fa-trash"></i></button></td></tr>`;
       });
-      document.getElementById('totalGastos').textContent = total.toFixed(2);
     }
 
-    // ---- EVENTOS DE FORMULARIOS ----
-    document.getElementById('btnAddVenta').addEventListener('click', () => {
+    function updateSugerenciasGastos() {
+      const datalist = document.getElementById('gastosSugeridos');
+      const descs = new Set();
+      Object.values(appData.months).forEach(m => (m.gastos||[]).forEach(g => descs.add(g.desc)));
+      datalist.innerHTML = Array.from(descs).map(d => `<option value="${d}">`).join('');
+    }
+
+    // Eventos de agregar
+    document.getElementById('btnAddVenta').addEventListener('click', ()=>{
       const f = document.getElementById('ventaFecha').value;
-      const cafe = +document.getElementById('ventaCafe').value || 0;
-      const choco = +document.getElementById('ventaChoco').value || 0;
-      const capu = +document.getElementById('ventaCapu').value || 0;
+      const cafe = +document.getElementById('ventaCafe').value||0;
+      const choco = +document.getElementById('ventaChoco').value||0;
+      const capu = +document.getElementById('ventaCapu').value||0;
       const obs = document.getElementById('ventaObs').value.trim();
-      if (!f || (cafe+choco+capu===0)) return alert('Fecha y al menos un vaso.');
+      if(!f||(cafe+choco+capu===0)) return alert('Fecha y vasos requeridos');
       appData.months[currentMonth].ventas.push({ fecha:f, cafe, chocolate:choco, capuchino:capu, obs });
       save(); renderVentas();
       document.getElementById('ventaCafe').value=0; document.getElementById('ventaChoco').value=0; document.getElementById('ventaCapu').value=0; document.getElementById('ventaObs').value='';
     });
-    document.getElementById('btnAddEfectivo').addEventListener('click', () => {
+    document.getElementById('btnAddEfectivo').addEventListener('click', ()=>{
       const f = document.getElementById('efectivoFecha').value;
       const m = parseFloat(document.getElementById('efectivoMonto').value);
       const obs = document.getElementById('efectivoObs').value.trim();
-      if (!f || isNaN(m) || m<=0) return alert('Complete fecha y monto.');
+      if(!f||isNaN(m)||m<=0) return alert('Complete fecha y monto');
       appData.months[currentMonth].efectivo.push({ fecha:f, monto:m, obs });
       save(); renderEfectivo();
       document.getElementById('efectivoMonto').value=''; document.getElementById('efectivoObs').value='';
     });
-    document.getElementById('btnAddCompra').addEventListener('click', () => {
+    document.getElementById('btnAddCompra').addEventListener('click', ()=>{
       const f = document.getElementById('compraFecha').value;
       const ins = document.getElementById('compraInsumo').value;
       const cant = parseFloat(document.getElementById('compraCantidad').value);
       const uni = document.getElementById('compraUnidad').value;
       const pre = parseFloat(document.getElementById('compraCosto').value);
-      if (!f || isNaN(cant) || cant<=0 || isNaN(pre) || pre<0) return alert('Complete correctamente.');
+      if(!f||isNaN(cant)||cant<=0||isNaN(pre)||pre<0) return alert('Complete correctamente');
       appData.months[currentMonth].compras.push({ fecha:f, insumo:ins, cantidad:cant, unidad:uni, precio:pre });
       save(); renderCompras();
       document.getElementById('compraCantidad').value=''; document.getElementById('compraCosto').value='';
     });
-    document.getElementById('btnAddGasto').addEventListener('click', () => {
+    document.getElementById('btnAddGasto').addEventListener('click', ()=>{
       const f = document.getElementById('gastoFecha').value;
       const d = document.getElementById('gastoDesc').value.trim();
       const m = parseFloat(document.getElementById('gastoMonto').value);
-      if (!f || !d || isNaN(m) || m<=0) return alert('Complete todos los campos.');
+      if(!f||!d||isNaN(m)||m<=0) return alert('Complete todos los campos');
       appData.months[currentMonth].gastos.push({ fecha:f, desc:d, monto:m });
-      save(); renderGastos();
+      save(); renderGastos(); updateSugerenciasGastos();
       document.getElementById('gastoDesc').value=''; document.getElementById('gastoMonto').value='';
     });
 
-    // Actualizar inventario en tiempo real
+    // Inventario en tiempo real
     document.addEventListener('change', e => {
       if (e.target.dataset.ins && e.target.dataset.tipo) {
         const ins = e.target.dataset.ins, tipo = e.target.dataset.tipo, field = e.target.dataset.field;
@@ -478,37 +405,39 @@
       }
     });
 
-    // Cálculo de costo de ventas
-    document.getElementById('btnCalcularCosto').addEventListener('click', () => {
+    // Cálculo costo de ventas
+    document.getElementById('btnCalcularCosto').addEventListener('click', ()=>{
       const metodo = document.getElementById('metodoCosteo').value;
       const mes = appData.months[currentMonth];
       let totalCOGS = 0;
       INSUMOS_BASE.forEach(ins => {
-        const compras = mes.compras.filter(c => c.insumo === ins);
-        const initVal = mes.inventario.inicial[ins].valor || 0;
-        const finalQty = mes.inventario.final[ins].cantidad || 0;
+        const compras = (mes.compras||[]).filter(c => c.insumo === ins);
+        const initVal = mes.inventario.inicial[ins]?.valor || 0;
+        const finalQty = mes.inventario.final[ins]?.cantidad || 0;
         let costoUnit = 0;
         if (compras.length) {
           if (metodo === 'max') costoUnit = Math.max(...compras.map(c => c.precio/c.cantidad));
           else if (metodo === 'last') costoUnit = compras[compras.length-1].precio / compras[compras.length-1].cantidad;
-          else if (metodo === 'avg') {
+          else { // avg ponderado
             const totalCant = compras.reduce((s,c)=>s+c.cantidad,0);
             const totalPre = compras.reduce((s,c)=>s+c.precio,0);
             costoUnit = totalCant ? totalPre/totalCant : 0;
           }
         } else {
-          const initQty = mes.inventario.inicial[ins].cantidad;
+          const initQty = mes.inventario.inicial[ins]?.cantidad || 0;
           costoUnit = initQty ? initVal/initQty : 0;
         }
         const finalVal = finalQty * costoUnit;
         const comprasVal = compras.reduce((s,c)=>s+c.precio,0);
         totalCOGS += initVal + comprasVal - finalVal;
+        // Actualizar valor inicial con costo promedio para el próximo mes
+        mes.inventario.inicial[ins].valor = initVal; // se mantiene el valor que el usuario puso o el calculado
       });
       mes.inventario.costoVentas = totalCOGS;
       save(); renderInventario();
     });
 
-    // Eliminaciones
+    // Eliminaciones genéricas
     document.addEventListener('click', e => {
       const btn = e.target.closest('button[data-type]');
       if (btn) {
@@ -523,256 +452,385 @@
       }
     });
 
-    // ------ DASHBOARD & GRÁFICOS ------
-    let barChart, doughnutChart, trendChart;
+    // ---- DASHBOARD ----
+    let barChart, doughnutChart;
     function renderDashboard() {
-      const mes = appData.months[currentMonth];
-      let ingreso=0, vCafe=0, vChoco=0, vCapu=0;
-      const daily = {};
-      mes.ventas.forEach(v => {
-        const ing = v.cafe*6+v.chocolate*7+v.capuchino*8;
-        ingreso += ing;
-        vCafe += v.cafe; vChoco += v.chocolate; vCapu += v.capuchino;
-        if (!daily[v.fecha]) daily[v.fecha] = { ingreso:0, efectivo:0, obs:'' };
-        daily[v.fecha].ingreso += ing;
-        daily[v.fecha].obs = v.obs || '';
+      const mode = document.getElementById('dashboardMode').value;
+      let datos;
+      if (mode === 'month') {
+        datos = [appData.months[currentMonth]];
+      } else if (mode === 'range') {
+        const from = document.getElementById('dashFrom').value;
+        const to = document.getElementById('dashTo').value;
+        if (!from || !to) { alert('Seleccione rango'); return; }
+        datos = Object.values(appData.months).filter(m => {
+          return (m.ventas||[]).some(v => v.fecha >= from && v.fecha <= to) ||
+                 (m.efectivo||[]).some(e => e.fecha >= from && e.fecha <= to);
+        });
+      } else {
+        datos = Object.values(appData.months);
+      }
+      let ingresos=0, efectivo=0, costoV=0, gastosT=0, vCafe=0, vChoco=0, vCapu=0;
+      datos.forEach(m => {
+        (m.ventas||[]).forEach(v => {
+          ingresos += (v.cafe||0)*6 + (v.chocolate||0)*7 + (v.capuchino||0)*8;
+          vCafe += v.cafe||0; vChoco += v.chocolate||0; vCapu += v.capuchino||0;
+        });
+        (m.efectivo||[]).forEach(e => efectivo += e.monto||0);
+        costoV += m.inventario?.costoVentas || 0;
+        (m.gastos||[]).forEach(g => gastosT += g.monto||0);
       });
-      mes.efectivo.forEach(e => {
-        if (!daily[e.fecha]) daily[e.fecha] = { ingreso:0, efectivo:0, obs:'' };
-        daily[e.fecha].efectivo += e.monto;
-        daily[e.fecha].obs = daily[e.fecha].obs || e.obs || '';
-      });
-      const fechas = Object.keys(daily).sort();
-      const efectivoTotal = mes.efectivo.reduce((s,e)=>s+e.monto,0);
-      const costoV = mes.inventario.costoVentas;
-      const gastosT = mes.gastos.reduce((s,g)=>s+g.monto,0);
-      const utBruta = costoV!==null ? ingreso - costoV : null;
-      const utNeta = utBruta!==null ? utBruta - gastosT : null;
-      const pacto = utNeta ? Math.abs(utNeta) * 0.01 : 0;
-      const liquido = utNeta ? utNeta - pacto : null;
-
+      const utBruta = ingresos - costoV;
+      const utNeta = utBruta - gastosT;
       document.getElementById('dashboardCards').innerHTML = `
-        <div class="card"><div class="label">Ingresos por ventas</div><div class="value">Bs ${ingreso.toFixed(2)}</div></div>
-        <div class="card"><div class="label">Efectivo recaudado</div><div class="value">Bs ${efectivoTotal.toFixed(2)}</div></div>
-        <div class="card"><div class="label">Costo de ventas</div><div class="value">${costoV!==null?'Bs '+costoV.toFixed(2):'—'}</div></div>
-        <div class="card"><div class="label">Utilidad Bruta</div><div class="value ${utBruta>=0?'profit-positive':'profit-negative'}">${utBruta!==null?'Bs '+utBruta.toFixed(2):'—'}</div></div>
-        <div class="card"><div class="label">Gastos operativos</div><div class="value">Bs ${gastosT.toFixed(2)}</div></div>
-        <div class="card"><div class="label">Utilidad Neta</div><div class="value ${utNeta>=0?'profit-positive':'profit-negative'}">${utNeta!==null?'Bs '+utNeta.toFixed(2):'—'}</div></div>
-        <div class="card"><div class="label">Pacto ayuda (1%)</div><div class="value">Bs ${pacto.toFixed(2)}</div></div>
-        <div class="card"><div class="label">Ingreso líquido</div><div class="value">${liquido!==null?'Bs '+liquido.toFixed(2):'—'}</div></div>
+        <div class="card"><div class="label">Ingresos</div><div class="value">Bs ${ingresos.toFixed(2)}</div></div>
+        <div class="card"><div class="label">Efectivo</div><div class="value">Bs ${efectivo.toFixed(2)}</div></div>
+        <div class="card"><div class="label">Costo Ventas</div><div class="value">Bs ${costoV.toFixed(2)}</div></div>
+        <div class="card"><div class="label">Utilidad Bruta</div><div class="value ${utBruta>=0?'profit-positive':'profit-negative'}">Bs ${utBruta.toFixed(2)}</div></div>
+        <div class="card"><div class="label">Gastos Op.</div><div class="value">Bs ${gastosT.toFixed(2)}</div></div>
+        <div class="card"><div class="label">Utilidad Neta</div><div class="value ${utNeta>=0?'profit-positive':'profit-negative'}">Bs ${utNeta.toFixed(2)}</div></div>
       `;
-
-      document.querySelector('#dailySummaryTable tbody').innerHTML = fechas.slice(-10).reverse().map(f => {
-        const d = daily[f];
-        const dif = d.efectivo - d.ingreso;
-        const vasos = mes.ventas.filter(v=>v.fecha===f).reduce((s,v)=>s+v.cafe+v.chocolate+v.capuchino,0);
-        return `<tr><td>${f}</td><td>${vasos}</td><td>Bs ${d.ingreso.toFixed(2)}</td><td>Bs ${d.efectivo.toFixed(2)}</td><td>${dif.toFixed(2)}</td><td>${d.obs}</td></tr>`;
-      }).join('');
-
       if (barChart) barChart.destroy();
       barChart = new Chart(document.getElementById('barChart').getContext('2d'), {
-        type:'bar',
-        data:{labels:['Ingresos','Costo Ventas','U.Bruta','Gastos','U.Neta'],datasets:[{label:'Bs',data:[ingreso,costoV||0,utBruta||0,gastosT,utNeta||0],backgroundColor:['#c8a27a','#8b5e3c','#2d6a4f','#bc4742','#1f4b3d']}]},
-        options:{plugins:{title:{display:true,text:'Resumen financiero mensual',font:{size:16}}}}
+        type:'bar', data:{labels:['Ingresos','Efectivo','Costo V.','U.Bruta','Gastos','U.Neta'], datasets:[{data:[ingresos,efectivo,costoV,utBruta,gastosT,utNeta], backgroundColor:['#c8a27a','#b08968','#8b5e3c','#2d6a4f','#bc4742','#1f4b3d']}]},
+        options:{plugins:{title:{display:true,text:'Resumen financiero'}}}
       });
       if (doughnutChart) doughnutChart.destroy();
       doughnutChart = new Chart(document.getElementById('doughnutChart').getContext('2d'), {
-        type:'doughnut',
-        data:{labels:['Café','Chocolate','Capuchino'],datasets:[{data:[vCafe,vChoco,vCapu],backgroundColor:['#b08968','#7f5539','#ddb892']}]},
-        options:{plugins:{title:{display:true,text:'Vasos vendidos por producto',font:{size:16}}}}
+        type:'doughnut', data:{labels:['Café','Chocolate','Capuchino'], datasets:[{data:[vCafe,vChoco,vCapu], backgroundColor:['#b08968','#7f5539','#ddb892']}]},
+        options:{plugins:{title:{display:true,text:'Vasos vendidos'}}}
       });
-      if (trendChart) trendChart.destroy();
-      if (fechas.length>1) {
-        trendChart = new Chart(document.getElementById('trendChart').getContext('2d'), {
-          type:'line',
-          data:{labels:fechas,datasets:[
-            {label:'Ingreso (Bs)',data:fechas.map(f=>daily[f].ingreso),borderColor:'#c8a27a'},
-            {label:'Efectivo (Bs)',data:fechas.map(f=>daily[f].efectivo),borderColor:'#5e3c1c'}
-          ]},
-          options:{plugins:{title:{display:true,text:'Evolución diaria ingresos vs efectivo',font:{size:16}}}}
-        });
-      }
     }
+    document.getElementById('dashboardMode').addEventListener('change', function(){
+      if (this.value === 'range') {
+        document.getElementById('rangeSelector').classList.remove('hidden');
+      } else {
+        document.getElementById('rangeSelector').classList.add('hidden');
+        renderDashboard();
+      }
+    });
+    document.getElementById('btnApplyRange').addEventListener('click', renderDashboard);
 
-    // ------ EXPORTACIÓN ------
-    const exportModal = document.getElementById('exportModal');
-    document.getElementById('btnExportExcel').addEventListener('click', ()=>{
-      exportModal.classList.remove('hidden');
-      exportModal.style.display = 'flex';
-    });
-    document.getElementById('btnCloseExport').addEventListener('click', ()=>{
-      exportModal.classList.add('hidden');
-      exportModal.style.display = 'none';
-    });
+    // Exportación
+    const exportModal = document.createElement('div');
+    exportModal.id = 'exportModal';
+    exportModal.className = 'hidden';
+    exportModal.style = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); align-items:center; justify-content:center; z-index:999;';
+    exportModal.innerHTML = `<div style="background:#fff; padding:2rem; border-radius:20px; width:90%; max-width:500px;">
+      <h3>Exportar a Excel</h3>
+      <div class="form-row"><div class="form-group"><label>Desde</label><input type="date" id="exportFrom"></div><div class="form-group"><label>Hasta</label><input type="date" id="exportTo"></div></div>
+      <div style="display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap;">
+        <button class="btn btn-outline" id="btnExportMonth">Mes actual</button>
+        <button class="btn btn-outline" id="btnExportDay">Día</button>
+        <button class="btn" id="btnExportRange">Rango</button>
+        <button class="btn btn-danger" id="btnCloseExport">Cerrar</button>
+      </div>
+    </div>`;
+    document.body.appendChild(exportModal);
+    document.getElementById('btnExportExcel').addEventListener('click', ()=>{ exportModal.classList.remove('hidden'); exportModal.style.display='flex'; });
+    document.getElementById('btnCloseExport').addEventListener('click', ()=>{ exportModal.classList.add('hidden'); exportModal.style.display='none'; });
     function doExport(from,to) {
       const wb = XLSX.utils.book_new();
       const all = { ventas:[], efectivo:[], compras:[], gastos:[] };
       Object.keys(appData.months).forEach(m => {
         const d = appData.months[m];
-        d.ventas.forEach(v => all.ventas.push({...v, month:m}));
-        d.efectivo.forEach(e => all.efectivo.push({...e, month:m}));
-        d.compras.forEach(c => all.compras.push({...c, month:m}));
-        d.gastos.forEach(g => all.gastos.push({...g, month:m}));
+        (d.ventas||[]).forEach(v => all.ventas.push({...v, month:m}));
+        (d.efectivo||[]).forEach(e => all.efectivo.push({...e, month:m}));
+        (d.compras||[]).forEach(c => all.compras.push({...c, month:m}));
+        (d.gastos||[]).forEach(g => all.gastos.push({...g, month:m}));
       });
       const filtro = (arr) => from && to ? arr.filter(x => x.fecha>=from && x.fecha<=to) : arr;
       const v = filtro(all.ventas), e = filtro(all.efectivo), c = filtro(all.compras), g = filtro(all.gastos);
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Café','Chocolate','Capuchino','Total Bs','Obs','Efectivo','Diferencia']].concat(v.map(x=>{
-        const tot = x.cafe*6+x.chocolate*7+x.capuchino*8;
-        const ef = all.efectivo.filter(k=>k.fecha===x.fecha).reduce((s,k)=>s+k.monto,0);
-        return [x.fecha, x.cafe, x.chocolate, x.capuchino, tot, x.obs||'', ef, ef-tot];
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Café','Chocolate','Capuchino','Total','Obs','Efectivo','Diferencia']].concat(v.map(x=>{
+        const tot = (x.cafe||0)*6+(x.chocolate||0)*7+(x.capuchino||0)*8;
+        const ef = all.efectivo.filter(k=>k.fecha===x.fecha).reduce((s,k)=>s+(k.monto||0),0);
+        return [x.fecha, x.cafe||0, x.chocolate||0, x.capuchino||0, tot, x.obs||'', ef, ef-tot];
       }))), 'Ventas');
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Monto','Obs']].concat(e.map(x=>[x.fecha,x.monto,x.obs||'']))), 'Efectivo');
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Insumo','Cantidad','Unidad','Precio','Costo Unit.']].concat(c.map(x=>[x.fecha,x.insumo,x.cantidad,x.unidad,x.precio, x.cantidad?x.precio/x.cantidad:0]))), 'Compras');
-      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Descripción','Monto']].concat(g.map(x=>[x.fecha,x.desc,x.monto]))), 'Gastos');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Monto','Obs']].concat(e.map(x=>[x.fecha, x.monto, x.obs||'']))), 'Efectivo');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Insumo','Cantidad','Unidad','Precio','Costo Unit.']].concat(c.map(x=>[x.fecha, x.insumo, x.cantidad, x.unidad, x.precio, x.cantidad?x.precio/x.cantidad:0]))), 'Compras');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Fecha','Descripción','Monto']].concat(g.map(x=>[x.fecha, x.desc, x.monto]))), 'Gastos');
       XLSX.writeFile(wb, `CafeMatic_${from||'todo'}_${to||''}.xlsx`);
-      exportModal.classList.add('hidden');
-      exportModal.style.display = 'none';
     }
-    document.getElementById('btnExportMonth').addEventListener('click',()=> doExport(null,null));
-    document.getElementById('btnExportDay').addEventListener('click',()=>{
+    document.getElementById('btnExportMonth').addEventListener('click', ()=> doExport(null,null));
+    document.getElementById('btnExportDay').addEventListener('click', ()=>{
       const d = document.getElementById('exportFrom').value; if(!d) return alert('Fecha requerida'); doExport(d,d);
     });
-    document.getElementById('btnExportRange').addEventListener('click',()=>{
+    document.getElementById('btnExportRange').addEventListener('click', ()=>{
       const f=document.getElementById('exportFrom').value, t=document.getElementById('exportTo').value;
       if(!f||!t) return alert('Rango completo'); doExport(f,t);
     });
 
-    // ------ CARGA DE DATOS HISTÓRICOS (completa) ------
+    // ---- IMPORTACIÓN EXCEL ----
+    function importExcel(file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, {type: 'array'});
+        const sheetName = wb.SheetNames[0];
+        const sheet = wb.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(sheet, {header:1});
+        if (json.length < 2) return alert('Archivo vacío');
+        const headers = json[0].map(h => (h||'').toString().toLowerCase().trim());
+        // Detectar tipo de hoja por encabezados
+        const isVentas = headers.includes('café') || headers.includes('chocolate') || headers.includes('capuchino');
+        const isEfectivo = headers.includes('monto') && !isVentas;
+        const isCompras = headers.includes('insumo') || headers.includes('cantidad');
+        const isGastos = headers.includes('descripción') || (headers.includes('descripcion') && headers.includes('monto'));
+        const rows = json.slice(1).filter(r => r.some(c => c!== undefined && c!== ''));
+        const targetMonth = currentMonth; // por ahora al mes actual
+        if (isVentas) {
+          rows.forEach(r => {
+            const fecha = r[0] ? String(r[0]) : '';
+            if (!fecha) return;
+            const cafe = parseInt(r[headers.indexOf('café')]) || parseInt(r[1]) || 0;
+            const choco = parseInt(r[headers.indexOf('chocolate')]) || parseInt(r[2]) || 0;
+            const capu = parseInt(r[headers.indexOf('capuchino')]) || parseInt(r[3]) || 0;
+            const obs = r[headers.indexOf('obs')] || r[headers.indexOf('observaciones')] || '';
+            appData.months[targetMonth].ventas.push({ fecha, cafe, chocolate:choco, capuchino:capu, obs: String(obs||'') });
+          });
+        } else if (isEfectivo) {
+          rows.forEach(r => {
+            const fecha = r[0] ? String(r[0]) : '';
+            const monto = parseFloat(r[headers.indexOf('monto')]) || parseFloat(r[1]) || 0;
+            const obs = r[headers.indexOf('obs')] || '';
+            if (fecha && monto) appData.months[targetMonth].efectivo.push({ fecha, monto, obs: String(obs||'') });
+          });
+        } else if (isCompras) {
+          rows.forEach(r => {
+            const fecha = r[0] ? String(r[0]) : '';
+            const insumo = r[headers.indexOf('insumo')] || '';
+            const cantidad = parseFloat(r[headers.indexOf('cantidad')]) || 0;
+            const unidad = r[headers.indexOf('unidad')] || 'g';
+            const precio = parseFloat(r[headers.indexOf('precio')]) || 0;
+            if (fecha && insumo && cantidad && precio) appData.months[targetMonth].compras.push({ fecha, insumo, cantidad, unidad, precio });
+          });
+        } else if (isGastos) {
+          rows.forEach(r => {
+            const fecha = r[0] ? String(r[0]) : '';
+            const desc = r[headers.indexOf('descripción')] || r[headers.indexOf('descripcion')] || r[1] || '';
+            const monto = parseFloat(r[headers.indexOf('monto')]) || parseFloat(r[2]) || 0;
+            if (fecha && desc && monto) appData.months[targetMonth].gastos.push({ fecha, desc: String(desc), monto });
+          });
+        } else {
+          // Intentar inferir: buscar columnas fecha y numéricas
+          alert('No se pudo determinar el tipo de datos. Asegúrese de que la primera fila tenga encabezados como Fecha, Café, Chocolate, etc.');
+        }
+        save();
+        alert('Datos importados correctamente.');
+        showSection('dashboard');
+      };
+      reader.readAsArrayBuffer(file);
+    }
+    document.getElementById('excelFileInput').addEventListener('change', function(e) {
+      if (this.files[0]) importExcel(this.files[0]);
+      this.value = '';
+    });
+    document.getElementById('btnImportExcelMain').addEventListener('click', ()=> document.getElementById('excelFileInput').click());
+    document.getElementById('btnImportExcelSide').addEventListener('click', ()=> document.getElementById('excelFileInput').click());
+
+    // ---- HISTORIAL MENSUAL ----
+    function renderHistorial() {
+      const meses = Object.keys(appData.months).sort();
+      if (meses.length === 0) { document.getElementById('historialTable').innerHTML = '<p>No hay datos.</p>'; return; }
+      // Conceptos fijos que aparecen en el resumen
+      const conceptosCostos = ['Café, chocolate y cappuccino','Vasos y tapas','Azúcar','Agua','Cucharilla'];
+      const conceptosGastos = ['Guantes de latex','Pasajes','Bolsas negras','Limpieza','Vasos Max CBBA - Transportes','Sellos de goma - Tapon con tinta','Alquiler','Gastos extraordinarios'];
+      const todosConceptos = [...conceptosCostos, ...conceptosGastos];
+      // Preparar tabla
+      const thead = document.getElementById('historialTable').querySelector('thead tr');
+      thead.innerHTML = '<th>Concepto</th>' + meses.map(m => `<th>${m}</th>`).join('');
+      const tbody = document.getElementById('historialTable').querySelector('tbody');
+      tbody.innerHTML = '';
+      // Para cada concepto, sumar los valores de cada mes
+      todosConceptos.forEach(concepto => {
+        const fila = document.createElement('tr');
+        fila.innerHTML = `<td>${concepto}</td>` + meses.map(m => {
+          let total = 0;
+          const mes = appData.months[m];
+          if (conceptosCostos.includes(concepto)) {
+            // Sumar costos de insumos relacionados
+            // Simplificación: Café, chocolate y cappuccino -> suma de compras de Café, Cocoa, Leche, etc.
+            if (concepto === 'Café, chocolate y cappuccino') {
+              total = (mes.compras||[]).filter(c => ['Café','Cocoa Ceibo','Cocoa Celinda','Leche','Bicarbonato','Canela','Maicena','Lecitina','Ácido Cítrico'].includes(c.insumo)).reduce((s,c)=>s+(c.precio||0),0);
+            } else if (concepto === 'Vasos y tapas') {
+              total = (mes.compras||[]).filter(c => ['Vasos','Tapas'].includes(c.insumo)).reduce((s,c)=>s+(c.precio||0),0);
+            } else if (concepto === 'Azúcar') {
+              total = (mes.compras||[]).filter(c => c.insumo==='Azúcar').reduce((s,c)=>s+(c.precio||0),0);
+            } else if (concepto === 'Agua') {
+              total = (mes.compras||[]).filter(c => c.insumo==='Agua').reduce((s,c)=>s+(c.precio||0),0);
+            } else if (concepto === 'Cucharilla') {
+              total = (mes.compras||[]).filter(c => c.insumo==='Cucharilla').reduce((s,c)=>s+(c.precio||0),0);
+            }
+          } else {
+            // Gastos operativos
+            total = (mes.gastos||[]).filter(g => {
+              const descLower = (g.desc||'').toLowerCase();
+              if (concepto === 'Alquiler' && descLower.includes('alquiler')) return true;
+              if (concepto === 'Pasajes' && descLower.includes('pasaje')) return true;
+              if (concepto === 'Limpieza' && descLower.includes('limpieza')) return true;
+              if (concepto === 'Guantes de latex' && descLower.includes('guante')) return true;
+              if (concepto === 'Bolsas negras' && descLower.includes('bolsa')) return true;
+              if (concepto === 'Vasos Max CBBA - Transportes' && descLower.includes('transporte')) return true;
+              if (concepto === 'Sellos de goma - Tapon con tinta' && descLower.includes('sello')) return true;
+              if (concepto === 'Gastos extraordinarios' && (descLower.includes('extraordinario') || descLower.includes('extra'))) return true;
+              return false;
+            }).reduce((s,g)=>s+(g.monto||0),0);
+          }
+          return `<td>${total ? total.toFixed(2) : '0.00'}</td>`;
+        }).join('');
+        tbody.appendChild(fila);
+      });
+      // Fila de Totales
+      const filaTotal = document.createElement('tr');
+      filaTotal.innerHTML = '<td><strong>Total Costos+Gastos</strong></td>' + meses.map(m => {
+        let total = 0;
+        const mes = appData.months[m];
+        (mes.compras||[]).forEach(c => total += c.precio||0);
+        (mes.gastos||[]).forEach(g => total += g.monto||0);
+        return `<td><strong>${total.toFixed(2)}</strong></td>`;
+      }).join('');
+      tbody.appendChild(filaTotal);
+      // Ingresos
+      const filaIng = document.createElement('tr');
+      filaIng.innerHTML = '<td>Ingresos</td>' + meses.map(m => {
+        const ingresos = (appData.months[m].ventas||[]).reduce((s,v)=> s + (v.cafe||0)*6 + (v.chocolate||0)*7 + (v.capuchino||0)*8, 0);
+        return `<td>${ingresos.toFixed(2)}</td>`;
+      }).join('');
+      tbody.appendChild(filaIng);
+      // Utilidad Neta
+      const filaUN = document.createElement('tr');
+      filaUN.innerHTML = '<td><strong>Ingreso/Pérdida Neta</strong></td>' + meses.map(m => {
+        const mes = appData.months[m];
+        const ingresos = (mes.ventas||[]).reduce((s,v)=> s + (v.cafe||0)*6 + (v.chocolate||0)*7 + (v.capuchino||0)*8, 0);
+        const costoV = mes.inventario?.costoVentas || 0;
+        const gastosT = (mes.gastos||[]).reduce((s,g)=>s+(g.monto||0),0);
+        const neta = ingresos - costoV - gastosT;
+        return `<td style="color:${neta>=0?'#2d6a4f':'#bc4742'}"><strong>${neta.toFixed(2)}</strong></td>`;
+      }).join('');
+      tbody.appendChild(filaUN);
+    }
+
+    // Cargar históricos (incluye compras y gastos reales)
     function cargarHistoricos() {
-      if (Object.keys(appData.months).length > 1 && !confirm('Esto sobrescribirá los datos actuales. ¿Continuar?')) return;
+      if (Object.keys(appData.months).length > 1 && !confirm('Sobrescribirá los datos actuales. ¿Continuar?')) return;
       const sample = {
         months: {
           "2026-01": {
             ventas: [
-              { fecha:"2026-01-24", cafe:35, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-25", cafe:40, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-26", cafe:66, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-27", cafe:49, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-28", cafe:59, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-29", cafe:70, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-30", cafe:55, chocolate:0, capuchino:0, obs:"" },
-              { fecha:"2026-01-31", cafe:52, chocolate:0, capuchino:0, obs:"" }
+              { fecha:"2026-01-24", cafe:35, chocolate:0, capuchino:0, obs:"" }, { fecha:"2026-01-25", cafe:40, chocolate:0, capuchino:0, obs:"" },
+              { fecha:"2026-01-26", cafe:66, chocolate:0, capuchino:0, obs:"" }, { fecha:"2026-01-27", cafe:49, chocolate:0, capuchino:0, obs:"" },
+              { fecha:"2026-01-28", cafe:59, chocolate:0, capuchino:0, obs:"" }, { fecha:"2026-01-29", cafe:70, chocolate:0, capuchino:0, obs:"" },
+              { fecha:"2026-01-30", cafe:55, chocolate:0, capuchino:0, obs:"" }, { fecha:"2026-01-31", cafe:52, chocolate:0, capuchino:0, obs:"" }
             ],
             efectivo: [
-              { fecha:"2026-01-29", monto:715, obs:"" },
-              { fecha:"2026-01-30", monto:297, obs:"" },
-              { fecha:"2026-01-31", monto:397, obs:"" }
+              { fecha:"2026-01-29", monto:715, obs:"" }, { fecha:"2026-01-30", monto:297, obs:"" }, { fecha:"2026-01-31", monto:397, obs:"" }
             ],
-            compras: [],
+            compras: [
+              { fecha:"2026-01-24", insumo:"Vasos", cantidad:100, unidad:"unid", precio:110 },
+              { fecha:"2026-01-24", insumo:"Tapas", cantidad:100, unidad:"unid", precio:105 },
+              { fecha:"2026-01-24", insumo:"Cucharilla", cantidad:100, unidad:"unid", precio:24 },
+              { fecha:"2026-01-24", insumo:"Agua", cantidad:40, unidad:"L", precio:50 },
+              { fecha:"2026-01-28", insumo:"Agua", cantidad:20, unidad:"L", precio:22 }
+            ],
             gastos: [
               { fecha:"2026-01-31", desc:"Alquiler (proporcional)", monto:96 },
-              { fecha:"2026-01-31", desc:"Gastos extraordinarios", monto:415 }
+              { fecha:"2026-01-31", desc:"Gastos extraordinarios", monto:415 },
+              { fecha:"2026-01-31", desc:"Pasajes", monto:96 },
+              { fecha:"2026-01-31", desc:"Limpieza", monto:5 },
+              { fecha:"2026-01-31", desc:"Guantes de latex", monto:6 },
+              { fecha:"2026-01-31", desc:"Bolsas negras", monto:1.5 }
             ],
             inventario: { inicial:{}, final:{}, costoVentas: null }
           },
           "2026-02": {
             ventas: [
-              { fecha:"2026-02-01", cafe:10, chocolate:15, capuchino:12, obs:"" },
-              { fecha:"2026-02-02", cafe:13, chocolate:15, capuchino:14, obs:"" },
-              { fecha:"2026-02-03", cafe:6, chocolate:3, capuchino:12, obs:"" },
-              { fecha:"2026-02-04", cafe:5, chocolate:1, capuchino:5, obs:"" },
-              { fecha:"2026-02-05", cafe:3, chocolate:2, capuchino:9, obs:"" },
-              { fecha:"2026-02-06", cafe:7, chocolate:1, capuchino:5, obs:"" },
-              { fecha:"2026-02-07", cafe:9, chocolate:15, capuchino:11, obs:"" },
-              { fecha:"2026-02-08", cafe:6, chocolate:2, capuchino:7, obs:"" },
-              { fecha:"2026-02-09", cafe:1, chocolate:5, capuchino:11, obs:"" },
-              { fecha:"2026-02-10", cafe:7, chocolate:7, capuchino:6, obs:"" },
-              { fecha:"2026-02-12", cafe:4, chocolate:8, capuchino:11, obs:"" },
-              { fecha:"2026-02-13", cafe:9, chocolate:3, capuchino:10, obs:"" },
-              { fecha:"2026-02-14", cafe:2, chocolate:9, capuchino:11, obs:"1 café para Leonel" },
-              { fecha:"2026-02-15", cafe:4, chocolate:0, capuchino:2, obs:"" },
-              { fecha:"2026-02-16", cafe:0, chocolate:0, capuchino:0, obs:"Feriado" },
-              { fecha:"2026-02-17", cafe:0, chocolate:0, capuchino:0, obs:"Feriado" },
-              { fecha:"2026-02-19", cafe:14, chocolate:12, capuchino:15, obs:"" },
-              { fecha:"2026-02-20", cafe:10, chocolate:6, capuchino:10, obs:"" },
-              { fecha:"2026-02-21", cafe:15, chocolate:6, capuchino:12, obs:"" },
-              { fecha:"2026-02-22", cafe:3, chocolate:6, capuchino:18, obs:"" },
-              { fecha:"2026-02-23", cafe:5, chocolate:4, capuchino:6, obs:"" },
-              { fecha:"2026-02-25", cafe:10, chocolate:5, capuchino:18, obs:"" },
-              { fecha:"2026-02-27", cafe:11, chocolate:3, capuchino:16, obs:"" },
-              { fecha:"2026-02-28", cafe:9, chocolate:10, capuchino:17, obs:"" }
+              { fecha:"2026-02-01", cafe:10, chocolate:15, capuchino:12, obs:"" }, { fecha:"2026-02-02", cafe:13, chocolate:15, capuchino:14, obs:"" },
+              { fecha:"2026-02-03", cafe:6, chocolate:3, capuchino:12, obs:"" }, { fecha:"2026-02-04", cafe:5, chocolate:1, capuchino:5, obs:"" },
+              { fecha:"2026-02-05", cafe:3, chocolate:2, capuchino:9, obs:"" }, { fecha:"2026-02-06", cafe:7, chocolate:1, capuchino:5, obs:"" },
+              { fecha:"2026-02-07", cafe:9, chocolate:15, capuchino:11, obs:"" }, { fecha:"2026-02-08", cafe:6, chocolate:2, capuchino:7, obs:"" },
+              { fecha:"2026-02-09", cafe:1, chocolate:5, capuchino:11, obs:"" }, { fecha:"2026-02-10", cafe:7, chocolate:7, capuchino:6, obs:"" },
+              { fecha:"2026-02-12", cafe:4, chocolate:8, capuchino:11, obs:"" }, { fecha:"2026-02-13", cafe:9, chocolate:3, capuchino:10, obs:"" },
+              { fecha:"2026-02-14", cafe:2, chocolate:9, capuchino:11, obs:"1 café para Leonel" }, { fecha:"2026-02-15", cafe:4, chocolate:0, capuchino:2, obs:"" },
+              { fecha:"2026-02-19", cafe:14, chocolate:12, capuchino:15, obs:"" }, { fecha:"2026-02-20", cafe:10, chocolate:6, capuchino:10, obs:"" },
+              { fecha:"2026-02-21", cafe:15, chocolate:6, capuchino:12, obs:"" }, { fecha:"2026-02-22", cafe:3, chocolate:6, capuchino:18, obs:"" },
+              { fecha:"2026-02-23", cafe:5, chocolate:4, capuchino:6, obs:"" }, { fecha:"2026-02-25", cafe:10, chocolate:5, capuchino:18, obs:"" },
+              { fecha:"2026-02-27", cafe:11, chocolate:3, capuchino:16, obs:"" }, { fecha:"2026-02-28", cafe:9, chocolate:10, capuchino:17, obs:"" }
             ],
             efectivo: [
-              { fecha:"2026-02-01", monto:288, obs:"" },
-              { fecha:"2026-02-02", monto:320, obs:"" },
-              { fecha:"2026-02-07", monto:642, obs:"" },
-              { fecha:"2026-02-08", monto:114, obs:"" },
-              { fecha:"2026-02-09", monto:147, obs:"Devolución Bs2" },
-              { fecha:"2026-02-10", monto:154, obs:"Devolución Bs2" },
-              { fecha:"2026-02-12", monto:187, obs:"" },
-              { fecha:"2026-02-13", monto:166, obs:"" },
-              { fecha:"2026-02-14", monto:160, obs:"" },
-              { fecha:"2026-02-15", monto:40, obs:"" },
-              { fecha:"2026-02-18", monto:159, obs:"" },
-              { fecha:"2026-02-20", monto:270, obs:"" },
-              { fecha:"2026-02-21", monto:218, obs:"Pérdida" },
-              { fecha:"2026-02-22", monto:186, obs:"Pérdida" },
-              { fecha:"2026-02-23", monto:101, obs:"Crédito Bs5" },
-              { fecha:"2026-02-25", monto:234, obs:"Crédito Bs5" },
-              { fecha:"2026-02-27", monto:210, obs:"Crédito Bs5" },
-              { fecha:"2026-02-28", monto:254, obs:"Crédito Bs6" }
+              { fecha:"2026-02-01", monto:288, obs:"" }, { fecha:"2026-02-02", monto:320, obs:"" }, { fecha:"2026-02-07", monto:642, obs:"" },
+              { fecha:"2026-02-08", monto:114, obs:"" }, { fecha:"2026-02-09", monto:147, obs:"Devolución Bs2" }, { fecha:"2026-02-10", monto:154, obs:"Devolución Bs2" },
+              { fecha:"2026-02-12", monto:187, obs:"" }, { fecha:"2026-02-13", monto:166, obs:"" }, { fecha:"2026-02-14", monto:160, obs:"" },
+              { fecha:"2026-02-15", monto:40, obs:"" }, { fecha:"2026-02-18", monto:159, obs:"" }, { fecha:"2026-02-20", monto:270, obs:"" },
+              { fecha:"2026-02-21", monto:218, obs:"Pérdida" }, { fecha:"2026-02-22", monto:186, obs:"Pérdida" }, { fecha:"2026-02-23", monto:101, obs:"Crédito Bs5" },
+              { fecha:"2026-02-25", monto:234, obs:"Crédito Bs5" }, { fecha:"2026-02-27", monto:210, obs:"Crédito Bs5" }, { fecha:"2026-02-28", monto:254, obs:"Crédito Bs6" }
             ],
             compras: [],
             gastos: [
-              { fecha:"2026-02-28", desc:"Alquiler", monto:480 },
-              { fecha:"2026-02-28", desc:"Gastos extraordinarios", monto:482 }
+              { fecha:"2026-02-28", desc:"Alquiler", monto:480 }, { fecha:"2026-02-28", desc:"Gastos extraordinarios", monto:482 },
+              { fecha:"2026-02-28", desc:"Pasajes", monto:180 }, { fecha:"2026-02-28", desc:"Guantes de latex", monto:5.4 },
+              { fecha:"2026-02-28", desc:"Bolsas negras", monto:2.5 }
             ],
             inventario: { inicial:{}, final:{}, costoVentas: null }
           },
           "2026-03": {
             ventas: [
-              { fecha:"2026-03-02", cafe:10, chocolate:9, capuchino:13, obs:"" },
-              { fecha:"2026-03-04", cafe:5, chocolate:5, capuchino:11, obs:"" },
-              { fecha:"2026-03-07", cafe:17, chocolate:19, capuchino:32, obs:"" },
-              { fecha:"2026-03-19", cafe:18, chocolate:32, capuchino:42, obs:"" },
-              { fecha:"2026-03-20", cafe:2, chocolate:6, capuchino:10, obs:"" },
-              { fecha:"2026-03-23", cafe:4, chocolate:12, capuchino:22, obs:"" },
-              { fecha:"2026-03-24", cafe:2, chocolate:3, capuchino:11, obs:"" },
-              { fecha:"2026-03-26", cafe:6, chocolate:9, capuchino:3, obs:"" },
-              { fecha:"2026-03-29", cafe:16, chocolate:11, capuchino:15, obs:"" },
-              { fecha:"2026-03-31", cafe:3, chocolate:17, capuchino:11, obs:"" }
+              { fecha:"2026-03-02", cafe:10, chocolate:9, capuchino:13, obs:"" }, { fecha:"2026-03-04", cafe:5, chocolate:5, capuchino:11, obs:"" },
+              { fecha:"2026-03-07", cafe:17, chocolate:19, capuchino:32, obs:"" }, { fecha:"2026-03-19", cafe:18, chocolate:32, capuchino:42, obs:"" },
+              { fecha:"2026-03-20", cafe:2, chocolate:6, capuchino:10, obs:"" }, { fecha:"2026-03-23", cafe:4, chocolate:12, capuchino:22, obs:"" },
+              { fecha:"2026-03-24", cafe:2, chocolate:3, capuchino:11, obs:"" }, { fecha:"2026-03-26", cafe:6, chocolate:9, capuchino:3, obs:"" },
+              { fecha:"2026-03-29", cafe:16, chocolate:11, capuchino:15, obs:"" }, { fecha:"2026-03-31", cafe:3, chocolate:17, capuchino:11, obs:"" }
             ],
             efectivo: [
-              { fecha:"2026-03-02", monto:206, obs:"" },
-              { fecha:"2026-03-04", monto:141, obs:"" },
-              { fecha:"2026-03-07", monto:468, obs:"" },
-              { fecha:"2026-03-19", monto:648, obs:"" },
-              { fecha:"2026-03-20", monto:150, obs:"" },
-              { fecha:"2026-03-23", monto:284, obs:"" },
-              { fecha:"2026-03-24", monto:121, obs:"" },
-              { fecha:"2026-03-26", monto:123, obs:"" },
-              { fecha:"2026-03-29", monto:293, obs:"" },
+              { fecha:"2026-03-02", monto:206, obs:"" }, { fecha:"2026-03-04", monto:141, obs:"" }, { fecha:"2026-03-07", monto:468, obs:"" },
+              { fecha:"2026-03-19", monto:648, obs:"" }, { fecha:"2026-03-20", monto:150, obs:"" }, { fecha:"2026-03-23", monto:284, obs:"" },
+              { fecha:"2026-03-24", monto:121, obs:"" }, { fecha:"2026-03-26", monto:123, obs:"" }, { fecha:"2026-03-29", monto:293, obs:"" },
               { fecha:"2026-03-31", monto:225, obs:"" }
             ],
-            compras: [],
+            compras: [
+              { fecha:"2026-03-30", insumo:"Café", cantidad:100, unidad:"g", precio:70 },
+              { fecha:"2026-03-30", insumo:"Café", cantidad:1000, unidad:"g", precio:146 },
+              { fecha:"2026-03-30", insumo:"Leche", cantidad:2000, unidad:"g", precio:175 },
+              { fecha:"2026-03-30", insumo:"Leche", cantidad:2000, unidad:"g", precio:180 },
+              { fecha:"2026-03-30", insumo:"Cocoa Ceibo", cantidad:50, unidad:"g", precio:12 },
+              { fecha:"2026-03-30", insumo:"Cocoa Ceibo", cantidad:150, unidad:"g", precio:22 },
+              { fecha:"2026-03-30", insumo:"Cocoa Ceibo", cantidad:250, unidad:"g", precio:43 },
+              { fecha:"2026-03-30", insumo:"Cocoa Ceibo", cantidad:1000, unidad:"g", precio:125 },
+              { fecha:"2026-03-30", insumo:"Cocoa Celinda", cantidad:160, unidad:"g", precio:25 },
+              { fecha:"2026-03-30", insumo:"Cocoa Celinda", cantidad:500, unidad:"g", precio:70 },
+              { fecha:"2026-03-30", insumo:"Bicarbonato", cantidad:140, unidad:"g", precio:5 },
+              { fecha:"2026-03-30", insumo:"Ácido Cítrico", cantidad:240, unidad:"g", precio:15 },
+              { fecha:"2026-03-30", insumo:"Lecitina", cantidad:20, unidad:"g", precio:12 }
+            ],
             gastos: [
-              { fecha:"2026-03-31", desc:"Alquiler", monto:480 },
-              { fecha:"2026-03-31", desc:"Gastos extraordinarios", monto:282 }
+              { fecha:"2026-03-31", desc:"Alquiler", monto:480 }, { fecha:"2026-03-31", desc:"Gastos extraordinarios", monto:282 },
+              { fecha:"2026-03-31", desc:"Pasajes", monto:150 }, { fecha:"2026-03-31", desc:"Guantes de latex", monto:0.7 }
             ],
             inventario: { inicial:{}, final:{}, costoVentas: null }
           },
           "2026-04": {
             ventas: [
-              { fecha:"2026-04-06", cafe:18, chocolate:13, capuchino:22, obs:"" },
-              { fecha:"2026-04-10", cafe:12, chocolate:5, capuchino:19, obs:"" },
-              { fecha:"2026-04-15", cafe:20, chocolate:25, capuchino:24, obs:"" },
-              { fecha:"2026-04-18", cafe:9, chocolate:4, capuchino:15, obs:"" },
-              { fecha:"2026-04-21", cafe:14, chocolate:20, capuchino:27, obs:"" },
-              { fecha:"2026-04-24", cafe:6, chocolate:11, capuchino:10, obs:"" },
-              { fecha:"2026-04-27", cafe:8, chocolate:19, capuchino:21, obs:"" },
-              { fecha:"2026-04-30", cafe:10, chocolate:19, capuchino:16, obs:"" }
+              { fecha:"2026-04-06", cafe:18, chocolate:13, capuchino:22, obs:"" }, { fecha:"2026-04-10", cafe:12, chocolate:5, capuchino:19, obs:"" },
+              { fecha:"2026-04-15", cafe:20, chocolate:25, capuchino:24, obs:"" }, { fecha:"2026-04-18", cafe:9, chocolate:4, capuchino:15, obs:"" },
+              { fecha:"2026-04-21", cafe:14, chocolate:20, capuchino:27, obs:"" }, { fecha:"2026-04-24", cafe:6, chocolate:11, capuchino:10, obs:"" },
+              { fecha:"2026-04-27", cafe:8, chocolate:19, capuchino:21, obs:"" }, { fecha:"2026-04-30", cafe:10, chocolate:19, capuchino:16, obs:"" }
             ],
             efectivo: [
-              { fecha:"2026-04-06", monto:375, obs:"" },
-              { fecha:"2026-04-10", monto:259, obs:"" },
-              { fecha:"2026-04-15", monto:487, obs:"" },
-              { fecha:"2026-04-18", monto:210, obs:"" },
-              { fecha:"2026-04-21", monto:439, obs:"Bs1 crédito anterior" },
-              { fecha:"2026-04-24", monto:193, obs:"" },
-              { fecha:"2026-04-27", monto:349, obs:"" },
-              { fecha:"2026-04-30", monto:322, obs:"" }
+              { fecha:"2026-04-06", monto:375, obs:"" }, { fecha:"2026-04-10", monto:259, obs:"" }, { fecha:"2026-04-15", monto:487, obs:"" },
+              { fecha:"2026-04-18", monto:210, obs:"" }, { fecha:"2026-04-21", monto:439, obs:"Bs1 crédito anterior" }, { fecha:"2026-04-24", monto:193, obs:"" },
+              { fecha:"2026-04-27", monto:349, obs:"" }, { fecha:"2026-04-30", monto:322, obs:"" }
             ],
-            compras: [],
+            compras: [
+              { fecha:"2026-04-01", insumo:"Café", cantidad:100, unidad:"g", precio:70 },
+              { fecha:"2026-04-17", insumo:"Café", cantidad:100, unidad:"g", precio:70 },
+              { fecha:"2026-04-17", insumo:"Leche", cantidad:2000, unidad:"g", precio:175 },
+              { fecha:"2026-04-01", insumo:"Azúcar", cantidad:11300, unidad:"g", precio:63 },
+              { fecha:"2026-04-01", insumo:"Canela", cantidad:114, unidad:"g", precio:49 },
+              { fecha:"2026-04-01", insumo:"Canela", cantidad:186, unidad:"g", precio:65 },
+              { fecha:"2026-04-01", insumo:"Maicena", cantidad:450, unidad:"g", precio:6 },
+              { fecha:"2026-04-01", insumo:"Lecitina", cantidad:20, unidad:"g", precio:12 },
+              { fecha:"2026-04-01", insumo:"Sal", cantidad:2910, unidad:"g", precio:6 },
+              { fecha:"2026-04-04", insumo:"Cucharilla", cantidad:1000, unidad:"unid", precio:38 }
+            ],
             gastos: [
               { fecha:"2026-04-30", desc:"Alquiler", monto:480 }
             ],
@@ -780,39 +838,43 @@
           },
           "2026-05": {
             ventas: [
-              { fecha:"2026-05-01", cafe:3, chocolate:11, capuchino:8, obs:"" },
-              { fecha:"2026-05-05", cafe:17, chocolate:18, capuchino:18, obs:"" },
-              { fecha:"2026-05-09", cafe:8, chocolate:9, capuchino:17, obs:"" },
-              { fecha:"2026-05-12", cafe:14, chocolate:17, capuchino:23, obs:"" },
-              { fecha:"2026-05-19", cafe:10, chocolate:23, capuchino:14, obs:"" },
-              { fecha:"2026-05-25", cafe:10, chocolate:20, capuchino:18, obs:"" },
+              { fecha:"2026-05-01", cafe:3, chocolate:11, capuchino:8, obs:"" }, { fecha:"2026-05-05", cafe:17, chocolate:18, capuchino:18, obs:"" },
+              { fecha:"2026-05-09", cafe:8, chocolate:9, capuchino:17, obs:"" }, { fecha:"2026-05-12", cafe:14, chocolate:17, capuchino:23, obs:"" },
+              { fecha:"2026-05-19", cafe:10, chocolate:23, capuchino:14, obs:"" }, { fecha:"2026-05-25", cafe:10, chocolate:20, capuchino:18, obs:"" },
               { fecha:"2026-05-29", cafe:6, chocolate:4, capuchino:17, obs:"" }
             ],
             efectivo: [
-              { fecha:"2026-05-01", monto:158, obs:"" },
-              { fecha:"2026-05-05", monto:382, obs:"" },
-              { fecha:"2026-05-09", monto:247, obs:"" },
-              { fecha:"2026-05-12", monto:386, obs:"" },
-              { fecha:"2026-05-19", monto:333, obs:"" },
-              { fecha:"2026-05-25", monto:346, obs:"" },
+              { fecha:"2026-05-01", monto:158, obs:"" }, { fecha:"2026-05-05", monto:382, obs:"" }, { fecha:"2026-05-09", monto:247, obs:"" },
+              { fecha:"2026-05-12", monto:386, obs:"" }, { fecha:"2026-05-19", monto:333, obs:"" }, { fecha:"2026-05-25", monto:346, obs:"" },
               { fecha:"2026-05-29", monto:200, obs:"" }
             ],
-            compras: [],
+            compras: [
+              { fecha:"2026-05-02", insumo:"Café", cantidad:200, unidad:"g", precio:135 },
+              { fecha:"2026-05-26", insumo:"Café", cantidad:100, unidad:"g", precio:70 },
+              { fecha:"2026-05-22", insumo:"Leche", cantidad:2000, unidad:"g", precio:175 },
+              { fecha:"2026-05-02", insumo:"Cocoa Ceibo", cantidad:1000, unidad:"g", precio:125 },
+              { fecha:"2026-05-14", insumo:"Cocoa Ceibo", cantidad:1000, unidad:"g", precio:122 },
+              { fecha:"2026-05-02", insumo:"Cocoa Celinda", cantidad:500, unidad:"g", precio:67 },
+              { fecha:"2026-05-22", insumo:"Cocoa Celinda", cantidad:500, unidad:"g", precio:67 },
+              { fecha:"2026-05-02", insumo:"Azúcar", cantidad:11300, unidad:"g", precio:64 },
+              { fecha:"2026-05-22", insumo:"Lecitina", cantidad:20, unidad:"g", precio:12 },
+              { fecha:"2026-05-26", insumo:"Agua", cantidad:20, unidad:"L", precio:22 }
+            ],
             gastos: [],
             inventario: { inicial:{}, final:{}, costoVentas: null }
           }
         }
       };
-      // Inicializar inventarios vacíos para cada mes histórico
+      // Asegurar estructura inventario
       Object.values(sample.months).forEach(m => {
         INSUMOS_BASE.forEach(ins => {
-          m.inventario.inicial[ins] = { cantidad:0, valor:0, unidad: UNIDAD_POR_DEFECTO[ins] };
-          m.inventario.final[ins] = { cantidad:0, unidad: UNIDAD_POR_DEFECTO[ins] };
+          m.inventario.inicial[ins] = m.inventario.inicial[ins] || { cantidad:0, valor:0, unidad: UNIDAD_POR_DEFECTO[ins] };
+          m.inventario.final[ins] = m.inventario.final[ins] || { cantidad:0, unidad: UNIDAD_POR_DEFECTO[ins] };
         });
       });
       appData = sample;
       save();
-      alert('Datos históricos cargados. Seleccione un mes para visualizar.');
+      alert('Datos históricos completos cargados.');
       location.reload();
     }
     document.getElementById('btnLoadHistoricalSide').addEventListener('click', cargarHistoricos);
@@ -820,7 +882,7 @@
 
     // Fechas por defecto
     const today = new Date().toISOString().slice(0,10);
-    ['ventaFecha','efectivoFecha','compraFecha','gastoFecha','exportFrom','exportTo'].forEach(id => {
+    ['ventaFecha','efectivoFecha','compraFecha','gastoFecha','exportFrom','exportTo','dashFrom','dashTo'].forEach(id => {
       const el = document.getElementById(id); if (el) el.value = today;
     });
     showSection('dashboard');
